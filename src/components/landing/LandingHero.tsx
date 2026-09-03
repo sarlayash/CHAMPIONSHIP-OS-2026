@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChampionshipSettings, Team } from '../../types';
+import { ChampionshipSettings, Team, Participant, CertificateRecord } from '../../types';
 import { 
   Trophy, 
   Award, 
@@ -18,6 +18,8 @@ import {
 interface LandingHeroProps {
   settings: ChampionshipSettings;
   teams: Team[];
+  participants: Participant[];
+  certificates: CertificateRecord[];
   onNavigate: (tab: string) => void;
   onOpenBulkModal: () => void;
 }
@@ -25,9 +27,15 @@ interface LandingHeroProps {
 export const LandingHero: React.FC<LandingHeroProps> = ({
   settings,
   teams,
+  participants,
+  certificates,
   onNavigate,
   onOpenBulkModal,
 }) => {
+  const totalCohortPoints = teams.reduce((sum, t) => sum + (t.totalPoints || 0), 0);
+  const sortedTeams = [...teams].sort((a, b) => b.totalPoints - a.totalPoints);
+  const topTeam = sortedTeams[0];
+
   const stages = [
     { num: '01', name: 'Learning League', desc: 'Core Java, Memory Model, OOP & Collections' },
     { num: '02', name: 'Coding League', desc: 'Arrays, Two-Pointers, Sliding Windows & Stacks' },
@@ -71,7 +79,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
 
         {/* Description / Subtitle */}
         <p className="max-w-2xl mx-auto text-xs sm:text-sm text-slate-300/90 mt-4 leading-relaxed font-serif-title">
-          The verified credentials and championship operating system powering 56 student learners across 10 elite engineering teams at Sapthgiri NPS University.
+          The verified credentials and championship operating system for 10 elite engineering teams at Sapthgiri NPS University.
         </p>
 
         {/* CTA Buttons */}
@@ -81,7 +89,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             className="px-6 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs uppercase tracking-wider flex items-center gap-2 shadow-xl shadow-amber-500/25 hover:scale-105 active:scale-95 transition cursor-pointer"
           >
             <Award className="w-4 h-4" />
-            Browse Issued Certificates
+            Browse Issued Certificates ({certificates.length})
           </button>
 
           <button
@@ -101,30 +109,42 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
           </button>
         </div>
 
-        {/* Live Statistics Bar */}
+        {/* Live Real Numbers Statistics Bar */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-12 pt-8 border-t border-slate-800/80 text-left">
           <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
             <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Teams Cohort</span>
-            <p className="text-2xl font-black text-white font-mono-code mt-0.5">10 Teams</p>
-            <p className="text-[10px] text-amber-400">Toxicos leading (Rank #1)</p>
+            <p className="text-2xl font-black text-white font-mono-code mt-0.5">{teams.length} Teams</p>
+            <p className="text-[10px] text-amber-400 truncate">
+              {totalCohortPoints > 0 && topTeam ? `${topTeam.name} (Rank #1)` : '10 Official Teams'}
+            </p>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
             <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Total Learners</span>
-            <p className="text-2xl font-black text-white font-mono-code mt-0.5">56 Students</p>
-            <p className="text-[10px] text-emerald-400">100% Recognized</p>
+            <p className="text-2xl font-black text-white font-mono-code mt-0.5">
+              {participants.length > 0 ? `${participants.length} Students` : '0 Registered'}
+            </p>
+            <p className="text-[10px] text-emerald-400">
+              {participants.length > 0 ? '100% Genuine Records' : 'Awaiting Admin Input'}
+            </p>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
             <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Certificates Issued</span>
-            <p className="text-2xl font-black text-amber-400 font-mono-code mt-0.5">168+ Records</p>
-            <p className="text-[10px] text-slate-400">QR & Hash Verified</p>
+            <p className="text-2xl font-black text-amber-400 font-mono-code mt-0.5">{certificates.length} Records</p>
+            <p className="text-[10px] text-slate-400">
+              {certificates.length > 0 ? 'QR & Hash Verified' : 'Awaiting Issuance'}
+            </p>
           </div>
 
           <div className="p-3.5 rounded-xl bg-slate-950/60 border border-slate-800">
             <span className="text-[10px] text-slate-400 uppercase tracking-wider font-semibold">Total Points Scored</span>
-            <p className="text-2xl font-black text-blue-400 font-mono-code mt-0.5">1,478,426</p>
-            <p className="text-[10px] text-slate-400">Over 13 Days</p>
+            <p className="text-2xl font-black text-blue-400 font-mono-code mt-0.5">
+              {totalCohortPoints.toLocaleString()}
+            </p>
+            <p className="text-[10px] text-slate-400">
+              {totalCohortPoints > 0 ? 'Live Mathematical Sum' : 'Real Numbers Engine'}
+            </p>
           </div>
         </div>
       </div>

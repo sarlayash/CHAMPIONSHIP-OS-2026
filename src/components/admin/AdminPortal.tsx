@@ -29,9 +29,12 @@ import {
   RefreshCw,
   Sparkles,
   Save,
-  BookOpen
+  BookOpen,
+  ChevronDown,
+  FileSpreadsheet
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { exportParticipantsCSV, exportTeamsCSV, exportCertificatesCSV } from '../../utils/csvExport';
 import { LearnersManager } from './LearnersManager';
 import { TeamsManager } from './TeamsManager';
 import { RealNumbersAudit } from './RealNumbersAudit';
@@ -195,27 +198,52 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     setTimeout(() => setRubricSavedToast(false), 2500);
   };
 
-  // Export CSV
-  const handleExportCSV = () => {
-    const headers = ["Certificate No", "Student Name", "USN", "Team", "Category", "Title", "Issue Date", "Status"];
-    const rows = certificates.map(c => [
-      c.certificateNo,
-      `"${c.participantName}"`,
-      c.usn,
-      `"${c.teamName}"`,
-      c.category,
-      `"${c.title}"`,
-      c.issueDate,
-      c.status
-    ]);
-    const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), ...rows.map(e => e.join(","))].join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", `ChampionshipOS_Certificates_Export_${Date.now()}.csv`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // CSV Export state & handlers
+  const [downloadMenuOpen, setDownloadMenuOpen] = useState(false);
+  const [csvDownloadToast, setCsvDownloadToast] = useState<string | null>(null);
+
+  const handleDownloadParticipants = () => {
+    if (participants.length === 0) {
+      alert('There are currently 0 registered learners. Add students to the roster first to export CSV data.');
+      return;
+    }
+    exportParticipantsCSV(participants);
+    setCsvDownloadToast(`Successfully downloaded Participants Roster (${participants.length} learners) as CSV`);
+    setDownloadMenuOpen(false);
+    setTimeout(() => setCsvDownloadToast(null), 3500);
+  };
+
+  const handleDownloadTeams = () => {
+    exportTeamsCSV(teams);
+    setCsvDownloadToast(`Successfully downloaded Championship Team Standings (${teams.length} teams) as CSV`);
+    setDownloadMenuOpen(false);
+    setTimeout(() => setCsvDownloadToast(null), 3500);
+  };
+
+  const handleDownloadCertificates = () => {
+    if (certificates.length === 0) {
+      alert('No certificates have been issued yet. Issue credentials via the Bulk Issuance Engine or Single Issue.');
+      return;
+    }
+    exportCertificatesCSV(certificates);
+    setCsvDownloadToast(`Successfully downloaded Certificates Registry (${certificates.length} credentials) as CSV`);
+    setDownloadMenuOpen(false);
+    setTimeout(() => setCsvDownloadToast(null), 3500);
+  };
+
+  const handleDownloadBoth = () => {
+    if (participants.length > 0) {
+      exportParticipantsCSV(participants);
+      setTimeout(() => {
+        exportTeamsCSV(teams);
+      }, 500);
+      setCsvDownloadToast(`Downloaded Participants Roster (${participants.length}) and Team Standings (${teams.length})`);
+    } else {
+      exportTeamsCSV(teams);
+      setCsvDownloadToast(`Downloaded Team Standings (${teams.length} teams). Learner roster was empty.`);
+    }
+    setDownloadMenuOpen(false);
+    setTimeout(() => setCsvDownloadToast(null), 3500);
   };
 
   // Save Settings
@@ -371,13 +399,96 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             Bulk Issuance Engine
           </button>
 
-          <button
-            onClick={handleExportCSV}
-            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs flex items-center gap-2 border border-slate-700 transition cursor-pointer"
-          >
-            <Download className="w-4 h-4 text-slate-400" />
-            Export CSV
-          </button>
+          <div className="relative">
+            <button
+              id="admin-download-csv-btn"
+              onClick={() => setDownloadMenuOpen(!downloadMenuOpen)}
+              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-100 font-semibold text-xs flex items-center gap-2 border border-slate-700 hover:border-amber-500/50 shadow-md transition cursor-pointer"
+            >
+              <FileSpreadsheet className="w-4 h-4 text-emerald-400" />
+              <span>Download CSV</span>
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${downloadMenuOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            {downloadMenuOpen && (
+              <>
+                <div 
+                  className="fixed inset-0 z-40" 
+                  onClick={() => setDownloadMenuOpen(false)} 
+                />
+                <div className="absolute right-0 mt-2 w-72 bg-slate-900 border border-slate-700/90 rounded-2xl shadow-2xl p-2 z-50 animate-fade-in">
+                  <div className="px-3 py-2 border-b border-slate-800 mb-1">
+                    <p className="text-xs font-bold text-white uppercase tracking-wider font-mono-code">External Record Export</p>
+                    <p className="text-[11px] text-slate-400">Download formatted CSV reports</p>
+                  </div>
+
+                  <button
+                    onClick={handleDownloadParticipants}
+                    className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-800 text-xs font-medium text-slate-200 hover:text-white flex items-center justify-between group transition cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 group-hover:bg-amber-500/20">
+                        <Users className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white">Participants Roster</p>
+                        <p className="text-[10px] text-slate-400">Rank, USN, Points, Attendance</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-mono-code px-1.5 py-0.5 rounded bg-slate-800 text-amber-300">
+                      {participants.length}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={handleDownloadTeams}
+                    className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-800 text-xs font-medium text-slate-200 hover:text-white flex items-center justify-between group transition cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-1.5 rounded-lg bg-blue-500/10 text-blue-400 group-hover:bg-blue-500/20">
+                        <Trophy className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white">Team Standings</p>
+                        <p className="text-[10px] text-slate-400">Ranks, Stages, Rubric, Repos</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-mono-code px-1.5 py-0.5 rounded bg-slate-800 text-blue-300">
+                      {teams.length}
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={handleDownloadCertificates}
+                    className="w-full text-left px-3 py-2.5 rounded-xl hover:bg-slate-800 text-xs font-medium text-slate-200 hover:text-white flex items-center justify-between group transition cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="p-1.5 rounded-lg bg-emerald-500/10 text-emerald-400 group-hover:bg-emerald-500/20">
+                        <FileText className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-white">Certificates Registry</p>
+                        <p className="text-[10px] text-slate-400">ID, Verification URL, Status</p>
+                      </div>
+                    </div>
+                    <span className="text-[10px] font-mono-code px-1.5 py-0.5 rounded bg-slate-800 text-emerald-300">
+                      {certificates.length}
+                    </span>
+                  </button>
+
+                  <div className="pt-1.5 mt-1 border-t border-slate-800">
+                    <button
+                      onClick={handleDownloadBoth}
+                      className="w-full text-center px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1.5 transition cursor-pointer"
+                    >
+                      <Download className="w-3.5 h-3.5" />
+                      Download Both (Learners & Teams)
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
 
           <button
             onClick={onLogout}
@@ -389,6 +500,22 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </div>
       </div>
 
+      {/* CSV Download Toast Notification */}
+      {csvDownloadToast && (
+        <div className="p-3.5 mb-6 rounded-xl bg-emerald-950/90 border border-emerald-500/50 text-emerald-300 text-xs font-semibold flex items-center justify-between shadow-xl shadow-emerald-500/10 animate-fade-in">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+            <span>{csvDownloadToast}</span>
+          </div>
+          <button 
+            onClick={() => setCsvDownloadToast(null)} 
+            className="text-emerald-400 hover:text-white text-xs px-1.5 py-0.5 rounded bg-emerald-900/50"
+          >
+            ✕
+          </button>
+        </div>
+      )}
+
       {/* KPI Stats Bar */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
         <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
@@ -397,7 +524,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <Users className="w-4 h-4 text-amber-400" />
           </div>
           <p className="text-2xl font-black text-white font-mono-code">{participants.length}</p>
-          <p className="text-[10px] text-slate-500">Across 10 Championship Teams</p>
+          <p className="text-[10px] text-slate-500">
+            {participants.length > 0 ? 'Enrolled in 10 Teams' : 'Awaiting Real Entries'}
+          </p>
         </div>
 
         <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
@@ -406,7 +535,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <Trophy className="w-4 h-4 text-blue-400" />
           </div>
           <p className="text-2xl font-black text-white font-mono-code">{teams.length}</p>
-          <p className="text-[10px] text-slate-500">Toxicos leading with 233,878 pts</p>
+          <p className="text-[10px] text-slate-500 truncate">
+            {teams[0]?.totalPoints > 0 ? `${teams[0].name} (${teams[0].totalPoints.toLocaleString()} pts)` : '10 Official Teams'}
+          </p>
         </div>
 
         <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">
@@ -415,7 +546,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <FileText className="w-4 h-4 text-emerald-400" />
           </div>
           <p className="text-2xl font-black text-emerald-400 font-mono-code">{certificates.length}</p>
-          <p className="text-[10px] text-emerald-500 font-medium">100% Guaranteed Coverage</p>
+          <p className="text-[10px] text-emerald-500 font-medium">
+            {certificates.length > 0 ? 'Cryptographically Registered' : 'Awaiting Issuance'}
+          </p>
         </div>
 
         <div className="p-4 rounded-xl bg-slate-900 border border-slate-800">

@@ -16,9 +16,11 @@ import {
   Sparkles, 
   ArrowUpDown,
   Sliders,
-  ExternalLink
+  ExternalLink,
+  Download
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { exportTeamsCSV } from '../../utils/csvExport';
 import { recalculateAllRealNumbers, syncTeamRename } from '../../utils/championshipCalculations';
 
 interface TeamsManagerProps {
@@ -327,6 +329,18 @@ export const TeamsManager: React.FC<TeamsManagerProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={() => {
+                exportTeamsCSV(teams);
+                setToastMessage(`Exported ${teams.length} team standings to CSV file.`);
+              }}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+              title="Download full championship team standings as CSV"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              Download CSV ({teams.length})
+            </button>
+
             <button
               onClick={handleSyncAllTeamsWithMembers}
               className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"

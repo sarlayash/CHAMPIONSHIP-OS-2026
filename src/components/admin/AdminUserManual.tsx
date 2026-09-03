@@ -269,6 +269,17 @@ export const AdminUserManual: React.FC = () => {
                 The student is unassigned, team point totals are mathematically recalculated, and cohort ranks are shifted without gaps.
               </p>
             </div>
+
+            <div className="p-4 bg-slate-950 rounded-xl border border-emerald-500/30 space-y-2">
+              <h4 className="font-bold text-emerald-400 text-xs flex items-center gap-1.5">
+                <Download className="w-4 h-4 text-emerald-400" />
+                <span>Step 2.4: Downloading Participants Roster CSV for University Records</span>
+              </h4>
+              <p className="text-slate-300 leading-relaxed">
+                Click <strong>"Download CSV"</strong> at the top of the Learners Roster or from the main Admin Portal header menu.
+                The exported spreadsheet includes complete participant details: Championship Rank, Legal Full Name, USN, Email, Contact Phone, Assigned Team, Captain Status, Total Points, Attendance Percentage, Department, Academic Year, Conferred Awards, Technical Skills, and Profile Links. Formatted with UTF-8 BOM for immediate opening in Microsoft Excel and Google Sheets.
+              </p>
+            </div>
           </div>
         </div>
       )}
@@ -325,6 +336,17 @@ export const AdminUserManual: React.FC = () => {
                 <strong>PPT Presentation:</strong> Final jury architecture slides and performance benchmarks.
               </div>
             </div>
+          </div>
+
+          <div className="p-4 bg-slate-950 rounded-xl border border-blue-500/30 text-xs space-y-2">
+            <h4 className="font-bold text-blue-400 text-xs flex items-center gap-1.5">
+              <Download className="w-4 h-4 text-blue-400" />
+              <span>Step 3.3: Downloading Team Standings CSV for Academic Records</span>
+            </h4>
+            <p className="text-slate-300 leading-relaxed">
+              Click <strong>"Download CSV"</strong> at the top of the Teams tab or from the main Admin Portal header menu.
+              The exported file records current rankings, team code, captain name, registered member count, stage score metrics (Learning League, Coding Battle, Quiz/Kahoot, Hackathon Finale), final Jury Rubric score (out of 100), jury evaluation remarks, project titles, repository URLs, and awarded titles.
+            </p>
           </div>
         </div>
       )}

@@ -92,7 +92,7 @@ export const LiveLeaderboard: React.FC<LiveLeaderboardProps> = ({
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              56 Individuals
+              {participants.length} Individuals
             </button>
           </div>
         </div>
@@ -189,11 +189,11 @@ export const LiveLeaderboard: React.FC<LiveLeaderboardProps> = ({
           <div className="flex items-center gap-2">
             <Flame className="w-5 h-5 text-amber-400" />
             <h2 className="text-sm font-bold text-white uppercase tracking-wider">
-              {viewMode === 'teams' ? 'All 10 Teams Standing & Breakdown' : 'Top Performing Learners (56 Total)'}
+              {viewMode === 'teams' ? 'All 10 Teams Standing & Breakdown' : `Top Performing Learners (${participants.length} Total)`}
             </h2>
           </div>
           <span className="text-xs text-slate-400">
-            {viewMode === 'teams' ? '10 Teams participating' : '56 Active Learners'}
+            {viewMode === 'teams' ? `${teams.length} Teams participating` : `${participants.length} Active Learners`}
           </span>
         </div>
 
@@ -312,59 +312,75 @@ export const LiveLeaderboard: React.FC<LiveLeaderboardProps> = ({
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-800/60">
-                {sortedParticipants.map((learner, idx) => (
-                  <tr 
-                    key={learner.id}
-                    onClick={() => onSelectParticipant(learner)}
-                    className="hover:bg-slate-800/50 transition cursor-pointer"
-                  >
-                    <td className="py-3 px-4 text-center font-bold font-mono-code">
-                      {idx < 3 ? (
-                        <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${
-                          idx === 0 ? 'bg-amber-500 text-slate-950' : idx === 1 ? 'bg-slate-300 text-slate-950' : 'bg-amber-800 text-white'
-                        }`}>
-                          {idx + 1}
-                        </span>
-                      ) : (
-                        <span className="text-slate-400">{idx + 1}</span>
-                      )}
-                    </td>
-                    <td className="py-3 px-4">
-                      <p className="font-bold text-white text-sm hover:text-amber-400 transition">{learner.name}</p>
-                      <p className="text-[10px] text-slate-400 font-mono-code">{learner.usn}</p>
-                    </td>
-                    <td className="py-3 px-4 text-slate-300 font-medium">
-                      Team {learner.teamName}
-                    </td>
-                    <td className="py-3 px-4">
-                      {learner.isLeader ? (
-                        <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold border border-amber-500/30">
-                          Team Captain
-                        </span>
-                      ) : (
-                        <span className="text-slate-400 text-xs">Member</span>
-                      )}
-                    </td>
-                    <td className="py-3 px-4 text-slate-300 font-mono-code">
-                      <span className={learner.attendanceRate >= 98 ? 'text-emerald-400 font-bold' : 'text-slate-300'}>
-                        {learner.attendanceRate}%
-                      </span>
-                    </td>
-                    <td className="py-3 px-4">
-                      <span className="text-amber-200 text-xs font-semibold">
-                        {learner.awardTitles[0] || 'Championship Participant'}
-                      </span>
-                    </td>
-                    <td className="py-3 px-4 text-right font-mono-code font-bold text-amber-400">
-                      {learner.totalPoints.toLocaleString()}
-                    </td>
-                    <td className="py-3 px-4 text-center">
-                      <button className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">
-                        <ArrowUpRight className="w-3.5 h-3.5" />
-                      </button>
+                {sortedParticipants.length === 0 ? (
+                  <tr>
+                    <td colSpan={8} className="py-12 text-center">
+                      <div className="max-w-md mx-auto space-y-3">
+                        <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center">
+                          <Users className="w-6 h-6" />
+                        </div>
+                        <h3 className="text-white font-bold text-sm">No Learners Registered Yet</h3>
+                        <p className="text-slate-400 text-xs">
+                          All mock learner data has been cleared. The Administrator can add real students, official USNs, and genuine points via the Admin Portal.
+                        </p>
+                      </div>
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  sortedParticipants.map((learner, idx) => (
+                    <tr 
+                      key={learner.id}
+                      onClick={() => onSelectParticipant(learner)}
+                      className="hover:bg-slate-800/50 transition cursor-pointer"
+                    >
+                      <td className="py-3 px-4 text-center font-bold font-mono-code">
+                        {idx < 3 ? (
+                          <span className={`inline-flex items-center justify-center w-6 h-6 rounded-full text-xs ${
+                            idx === 0 ? 'bg-amber-500 text-slate-950' : idx === 1 ? 'bg-slate-300 text-slate-950' : 'bg-amber-800 text-white'
+                          }`}>
+                            {idx + 1}
+                          </span>
+                        ) : (
+                          <span className="text-slate-400">{idx + 1}</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4">
+                        <p className="font-bold text-white text-sm hover:text-amber-400 transition">{learner.name}</p>
+                        <p className="text-[10px] text-slate-400 font-mono-code">{learner.usn}</p>
+                      </td>
+                      <td className="py-3 px-4 text-slate-300 font-medium">
+                        Team {learner.teamName}
+                      </td>
+                      <td className="py-3 px-4">
+                        {learner.isLeader ? (
+                          <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px] font-bold border border-amber-500/30">
+                            Team Captain
+                          </span>
+                        ) : (
+                          <span className="text-slate-400 text-xs">Member</span>
+                        )}
+                      </td>
+                      <td className="py-3 px-4 text-slate-300 font-mono-code">
+                        <span className={learner.attendanceRate >= 98 ? 'text-emerald-400 font-bold' : 'text-slate-300'}>
+                          {learner.attendanceRate}%
+                        </span>
+                      </td>
+                      <td className="py-3 px-4">
+                        <span className="text-amber-200 text-xs font-semibold">
+                          {learner.awardTitles[0] || 'Championship Participant'}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-right font-mono-code font-bold text-amber-400">
+                        {learner.totalPoints.toLocaleString()}
+                      </td>
+                      <td className="py-3 px-4 text-center">
+                        <button className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300">
+                          <ArrowUpRight className="w-3.5 h-3.5" />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

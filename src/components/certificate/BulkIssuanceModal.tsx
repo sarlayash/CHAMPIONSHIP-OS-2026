@@ -117,7 +117,7 @@ export const BulkIssuanceModal: React.FC<BulkIssuanceModalProps> = ({
             </div>
             <div>
               <h2 className="text-lg font-bold text-white">Bulk Certificate Issuance Engine</h2>
-              <p className="text-xs text-slate-400">Issue authenticated credentials to the 56 learners or entire teams simultaneously.</p>
+              <p className="text-xs text-slate-400">Issue authenticated credentials to registered learners or entire teams simultaneously.</p>
             </div>
           </div>
           <button onClick={onClose} className="text-slate-400 hover:text-white p-1">
@@ -166,7 +166,7 @@ export const BulkIssuanceModal: React.FC<BulkIssuanceModalProps> = ({
                   }`}
                 >
                   <Users className="w-4 h-4 mx-auto mb-1 text-amber-400" />
-                  All 56 Learners
+                  All Learners ({participants.length})
                 </button>
 
                 <button

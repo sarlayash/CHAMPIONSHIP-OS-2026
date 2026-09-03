@@ -17,9 +17,11 @@ import {
   Sparkles,
   Phone,
   Mail,
-  BookOpen
+  BookOpen,
+  Download
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { exportParticipantsCSV } from '../../utils/csvExport';
 import { recalculateAllRealNumbers, syncCertificatesForLearner } from '../../utils/championshipCalculations';
 
 interface LearnersManagerProps {
@@ -308,6 +310,22 @@ export const LearnersManager: React.FC<LearnersManagerProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2.5">
+            <button
+              onClick={() => {
+                if (participants.length === 0) {
+                  alert('There are currently 0 learners registered. Please add learners to export the CSV roster.');
+                  return;
+                }
+                exportParticipantsCSV(participants);
+                showToast(`Exported ${participants.length} learners to CSV file.`);
+              }}
+              className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"
+              title="Download entire participants roster as CSV"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              Download CSV ({participants.length})
+            </button>
+
             <button
               onClick={handleRecalculateStandings}
               className="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 text-xs font-semibold flex items-center gap-1.5 transition cursor-pointer"

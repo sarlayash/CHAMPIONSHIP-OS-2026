@@ -224,33 +224,42 @@ export const TeamsDirectory: React.FC<TeamsDirectoryProps> = ({
                 <Users className="w-4 h-4 text-amber-400" />
                 Team Roster ({teamMembers.length} Members)
               </h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {teamMembers.map((m) => (
-                  <div
-                    key={m.id}
-                    className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between"
-                  >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold text-xs text-white">{m.name}</span>
-                        {m.isLeader && (
-                          <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-bold">
-                            Leader
-                          </span>
-                        )}
+              {teamMembers.length === 0 ? (
+                <div className="p-4 rounded-xl bg-slate-950 border border-dashed border-slate-800 text-center">
+                  <p className="text-xs text-slate-400">No members assigned to this squad yet.</p>
+                  <p className="text-[10px] text-slate-500 mt-1">
+                    The administrator can assign real learners and specify team captains in the Admin Portal.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {teamMembers.map((m) => (
+                    <div
+                      key={m.id}
+                      className="p-3 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between"
+                    >
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-bold text-xs text-white">{m.name}</span>
+                          {m.isLeader && (
+                            <span className="px-1.5 py-0.2 rounded bg-amber-500/20 text-amber-300 text-[9px] font-bold">
+                              Leader
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[10px] text-slate-400 font-mono-code">{m.usn}</p>
+                        <p className="text-[10px] text-amber-300/80 mt-0.5">{m.awardTitles[0] || 'Participant'}</p>
                       </div>
-                      <p className="text-[10px] text-slate-400 font-mono-code">{m.usn}</p>
-                      <p className="text-[10px] text-amber-300/80 mt-0.5">{m.awardTitles[0]}</p>
+                      <div className="text-right">
+                        <p className="text-xs font-mono-code font-bold text-slate-300">
+                          {m.totalPoints.toLocaleString()}
+                        </p>
+                        <p className="text-[9px] text-slate-500">Pts</p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-xs font-mono-code font-bold text-slate-300">
-                        {m.totalPoints.toLocaleString()}
-                      </p>
-                      <p className="text-[9px] text-slate-500">Pts</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Team Digital Certificates */}

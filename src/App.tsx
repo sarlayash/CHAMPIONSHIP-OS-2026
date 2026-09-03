@@ -34,11 +34,86 @@ export default function App() {
   const [currentRole, setCurrentRole] = useState<UserRole>('participant');
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState<boolean>(false);
 
-  // Entities State
-  const [teams, setTeams] = useState<Team[]>(TEAMS_DATA);
-  const [participants, setParticipants] = useState<Participant[]>(PARTICIPANTS_DATA);
-  const [certificates, setCertificates] = useState<CertificateRecord[]>(INITIAL_CERTIFICATES);
-  const [settings, setSettings] = useState<ChampionshipSettings>(INITIAL_SETTINGS);
+  // Entities State with persistent local storage
+  const [teams, setTeams] = useState<Team[]>(() => {
+    try {
+      const saved = localStorage.getItem('championshipos_v3_teams');
+      return saved ? JSON.parse(saved) : TEAMS_DATA;
+    } catch {
+      return TEAMS_DATA;
+    }
+  });
+  const [participants, setParticipants] = useState<Participant[]>(() => {
+    try {
+      const saved = localStorage.getItem('championshipos_v3_participants');
+      return saved ? JSON.parse(saved) : PARTICIPANTS_DATA;
+    } catch {
+      return PARTICIPANTS_DATA;
+    }
+  });
+  const [certificates, setCertificates] = useState<CertificateRecord[]>(() => {
+    try {
+      const saved = localStorage.getItem('championshipos_v3_certificates');
+      return saved ? JSON.parse(saved) : INITIAL_CERTIFICATES;
+    } catch {
+      return INITIAL_CERTIFICATES;
+    }
+  });
+  const [settings, setSettings] = useState<ChampionshipSettings>(() => {
+    try {
+      const saved = localStorage.getItem('championshipos_v3_settings');
+      return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
+    } catch {
+      return INITIAL_SETTINGS;
+    }
+  });
+
+  // Purge any legacy mock storage keys
+  useEffect(() => {
+    try {
+      localStorage.removeItem('championship_teams');
+      localStorage.removeItem('championship_participants');
+      localStorage.removeItem('championship_certificates');
+      localStorage.removeItem('championship_settings');
+      localStorage.removeItem('championshipos_real_teams');
+      localStorage.removeItem('championshipos_real_participants');
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  // Save updates to localStorage so real admin data persists across reloads
+  useEffect(() => {
+    try {
+      localStorage.setItem('championshipos_v3_teams', JSON.stringify(teams));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [teams]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('championshipos_v3_participants', JSON.stringify(participants));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [participants]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('championshipos_v3_certificates', JSON.stringify(certificates));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [certificates]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('championshipos_v3_settings', JSON.stringify(settings));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [settings]);
 
   // Active Modals State
   const [selectedCertificate, setSelectedCertificate] = useState<CertificateRecord | null>(null);
@@ -112,6 +187,8 @@ export default function App() {
             <LandingHero
               settings={settings}
               teams={teams}
+              participants={participants}
+              certificates={certificates}
               onNavigate={(tab) => setActiveTab(tab)}
               onOpenBulkModal={() => setBulkModalOpen(true)}
             />

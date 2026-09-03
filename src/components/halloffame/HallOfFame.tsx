@@ -7,13 +7,12 @@ import {
   Star, 
   Flame, 
   Medal, 
-  Award,
+  Award, 
   MessageSquare, 
-  Image as ImageIcon,
-  CheckCircle2,
-  Users
+  Image as ImageIcon, 
+  CheckCircle2, 
+  Users 
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 interface HallOfFameProps {
   awards: AwardItem[];
@@ -33,7 +32,7 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
   const [activeCategory, setActiveCategory] = useState<string>('all');
 
   const championTeam = teams.find(t => t.rank === 1) || teams[0];
-  const championStudent = participants.find(p => p.rank === 1) || participants[0];
+  const championStudent = participants.find(p => p.rank === 1) || (participants.length > 0 ? participants[0] : null);
 
   const categories = [
     { id: 'all', label: 'All Awards (50+)' },
@@ -49,24 +48,24 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
     ? awards
     : awards.filter(a => a.category === activeCategory);
 
-  const testimonials = [
+  const leadershipStatements = [
     {
-      quote: "The 13-day Java DSA Championship completely transformed how I think about algorithms. Building the Distributed Graph Engine under Kapil Sir's mentorship gave me genuine corporate engineering confidence.",
-      author: "Aarav Sharma",
-      role: "Java DSA Champion 2026 • Captain, Team Toxicos",
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80"
+      quote: "The 13-day championship curriculum is engineered to simulate high-stress tier-1 software engineering environments, developing both deep algorithmic instincts and robust production team dynamics.",
+      author: "Kapil Narula",
+      role: "Program Director & Lead Technical Mentor • Industry Oriented Training (IOT)",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80"
     },
     {
-      quote: "The daily live coding battles and instant rubric evaluations pushed our team to optimize lock-free order matching to microsecond latency. Receiving this official verifiable certificate is the pinnacle of my college career.",
-      author: "Sneha Reddy",
-      role: "Java DSA Vice Champion • Captain, Team TechTok",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80"
+      quote: "Our objective at Sapthgiri NPS University is graduating engineers who excel in data structures, algorithms, and real-time collaboration. This platform provides immutable verification of their hard work.",
+      author: "Dr. K. R. Sharma",
+      role: "Dean, Faculty of Engineering & Technology • Sapthgiri NPS University",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
     },
     {
-      quote: "Every single one of our 56 cohort learners left recognized and empowered. The standard of technical guidance from Industry Oriented Training at Sapthgiri was world-class.",
-      author: "Rohan Kulkarni",
-      role: "Elite Performer • Team Triple Bytes",
-      avatar: "https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=100&auto=format&fit=crop&q=80"
+      quote: "Rigorous daily coding battles, synchronized assessment rubrics, and the Grand Finale Hackathon establish an authentic engineering benchmark for every participating learner.",
+      author: "Academic Advisory Board",
+      role: "Faculty of Engineering & Technology",
+      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
     }
   ];
 
@@ -89,72 +88,90 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
       {/* Dual Pinnacle Champions Showcase */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Champion Individual */}
-        <div className="bg-gradient-to-br from-amber-950/40 via-slate-900 to-slate-950 border-2 border-amber-500/60 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl" />
-          <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-3">
-            <Trophy className="w-4 h-4" />
-            Champion Learner of the Year 2026
-          </div>
-          <h3 className="text-3xl font-black text-white font-serif-title">
-            {championStudent.name}
-          </h3>
-          <p className="text-xs text-amber-300 font-mono-code mt-1">
-            USN: {championStudent.usn} • Captain, Team {championStudent.teamName}
-          </p>
-          <div className="my-4 p-4 bg-slate-950/70 border border-amber-500/20 rounded-2xl">
-            <div className="flex justify-between items-center text-xs">
-              <span className="text-slate-400">Total Championship Points</span>
-              <span className="text-xl font-black text-amber-400 font-mono-code">{championStudent.totalPoints.toLocaleString()}</span>
+        {championStudent ? (
+          <div className="bg-gradient-to-br from-amber-950/40 via-slate-900 to-slate-950 border-2 border-amber-500/60 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl" />
+            <div className="flex items-center gap-2 text-amber-400 text-xs font-bold uppercase tracking-wider mb-3">
+              <Trophy className="w-4 h-4" />
+              Champion Learner of the Year 2026
             </div>
-            <div className="flex justify-between items-center text-xs mt-2">
-              <span className="text-slate-400">Attendance & Submission Consistency</span>
-              <span className="text-sm font-bold text-emerald-400 font-mono-code">100% Flawless</span>
+            <h3 className="text-3xl font-black text-white font-serif-title">
+              {championStudent.name}
+            </h3>
+            <p className="text-xs text-amber-300 font-mono-code mt-1">
+              USN: {championStudent.usn} • Captain, Team {championStudent.teamName}
+            </p>
+            <div className="my-4 p-4 bg-slate-950/70 border border-amber-500/20 rounded-2xl">
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-400">Total Championship Points</span>
+                <span className="text-xl font-black text-amber-400 font-mono-code">{championStudent.totalPoints.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between items-center text-xs mt-2">
+                <span className="text-slate-400">Attendance & Submission Consistency</span>
+                <span className="text-sm font-bold text-emerald-400 font-mono-code">{championStudent.attendanceRate}% Verified</span>
+              </div>
             </div>
+            <p className="text-xs text-slate-300 italic font-serif-title leading-relaxed">
+              &ldquo;Awarded the ultimate individual championship title for solving the highest quantity of hard algorithmic challenges and orchestrating team architecture.&rdquo;
+            </p>
+            <button
+              onClick={() => onSelectParticipant(championStudent)}
+              className="mt-5 px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition cursor-pointer"
+            >
+              View Student Profile & Credentials
+            </button>
           </div>
-          <p className="text-xs text-slate-300 italic font-serif-title leading-relaxed">
-            &ldquo;Awarded the ultimate individual championship title for solving the highest quantity of hard algorithmic challenges and orchestrating team architecture.&rdquo;
-          </p>
-          <button
-            onClick={() => onSelectParticipant(championStudent)}
-            className="mt-5 px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs rounded-xl transition cursor-pointer"
-          >
-            View Student Profile & Credentials
-          </button>
-        </div>
+        ) : (
+          <div className="bg-slate-900/80 border-2 border-dashed border-slate-700 rounded-3xl p-6 md:p-8 text-center flex flex-col items-center justify-center space-y-3">
+            <div className="w-14 h-14 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 flex items-center justify-center">
+              <Trophy className="w-7 h-7" />
+            </div>
+            <h3 className="text-xl font-bold text-white font-royal">Champion Learner Title Reserved</h3>
+            <p className="text-xs text-slate-400 max-w-sm">
+              All mock participant data has been wiped. Once the administrator inputs real student names, USNs, and scores in the Admin Portal, the #1 ranked learner will be automatically crowned here.
+            </p>
+          </div>
+        )}
 
         {/* Champion Team */}
-        <div className="bg-gradient-to-br from-indigo-950/40 via-slate-900 to-slate-950 border-2 border-indigo-500/60 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl" />
-          <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
-            <Crown className="w-4 h-4" />
-            Overall Grand Champion Team
-          </div>
-          <h3 className="text-3xl font-black text-white font-royal">
-            Team {championTeam.name}
-          </h3>
-          <p className="text-xs text-indigo-300 font-mono-code mt-1">
-            Code: {championTeam.code} • 6 Active Learners
-          </p>
-          <div className="my-4 p-4 bg-slate-950/70 border border-indigo-500/20 rounded-2xl">
-            <div className="flex justify-between items-center text-xs">
-              <span className="text-slate-400">Total Team Points</span>
-              <span className="text-xl font-black text-amber-400 font-mono-code">233,878 pts</span>
+        {championTeam && (
+          <div className="bg-gradient-to-br from-indigo-950/40 via-slate-900 to-slate-950 border-2 border-indigo-500/60 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl" />
+            <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
+              <Crown className="w-4 h-4" />
+              Rank #1 Championship Team
             </div>
-            <div className="flex justify-between items-center text-xs mt-2">
-              <span className="text-slate-400">Grand Finale Project</span>
-              <span className="text-xs font-semibold text-slate-200 truncate">{championTeam.projectTitle}</span>
+            <h3 className="text-3xl font-black text-white font-royal">
+              Team {championTeam.name}
+            </h3>
+            <p className="text-xs text-indigo-300 font-mono-code mt-1">
+              Code: {championTeam.code} • {championTeam.memberCount} Registered Members
+            </p>
+            <div className="my-4 p-4 bg-slate-950/70 border border-indigo-500/20 rounded-2xl">
+              <div className="flex justify-between items-center text-xs">
+                <span className="text-slate-400">Total Team Points</span>
+                <span className="text-xl font-black text-amber-400 font-mono-code">
+                  {championTeam.totalPoints.toLocaleString()} pts
+                </span>
+              </div>
+              <div className="flex justify-between items-center text-xs mt-2">
+                <span className="text-slate-400">Grand Finale Project</span>
+                <span className="text-xs font-semibold text-slate-200 truncate">{championTeam.projectTitle}</span>
+              </div>
             </div>
+            <p className="text-xs text-slate-300 italic font-serif-title leading-relaxed">
+              {championTeam.totalPoints > 0
+                ? "Demonstrated exemplary collaborative engineering and algorithmic performance throughout the 13-day championship."
+                : "Official team standings and score metrics will reflect in real time as the administrator inputs individual learner scores and stage challenge points."}
+            </p>
+            <button
+              onClick={() => onSelectTeam(championTeam)}
+              className="mt-5 px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs rounded-xl transition cursor-pointer"
+            >
+              View Team Dossier & Project
+            </button>
           </div>
-          <p className="text-xs text-slate-300 italic font-serif-title leading-relaxed">
-            &ldquo;Demonstrated undisputed collaborative supremacy, setting unprecedented benchmarks in concurrent graph traversal in Java 21.&rdquo;
-          </p>
-          <button
-            onClick={() => onSelectTeam(championTeam)}
-            className="mt-5 px-4 py-2 bg-indigo-500 hover:bg-indigo-400 text-white font-bold text-xs rounded-xl transition cursor-pointer"
-          >
-            View Team Dossier & Project
-          </button>
-        </div>
+        )}
       </div>
 
       {/* Official Recognition Framework Category Filter & Cards */}
@@ -163,10 +180,10 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
           <div>
             <h2 className="text-xl font-bold text-white font-royal flex items-center gap-2">
               <Award className="w-5 h-5 text-amber-400" />
-              Official Recognition Framework (56 Learners Guarantee)
+              Official Recognition Framework
             </h2>
             <p className="text-xs text-slate-400">
-              Every learner receives at least one certificate and badge, with prestigious titles reserved for excellence.
+              Every learner receives at least one certificate and badge, with prestigious titles conferred for excellence.
             </p>
           </div>
 
@@ -178,7 +195,7 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition cursor-pointer ${
                   activeCategory === cat.id
-                    ? 'bg-amber-500 text-slate-950'
+                    ? 'bg-amber-500 text-slate-950 font-bold'
                     : 'text-slate-400 hover:text-white hover:bg-slate-800'
                 }`}
               >
@@ -188,15 +205,15 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
           </div>
         </div>
 
-        {/* Awards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {/* Award Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredAwards.map((award) => (
             <div
               key={award.id}
-              className="p-4 bg-slate-900/90 border border-slate-800 rounded-xl hover:border-slate-700 transition flex flex-col justify-between group"
+              className="bg-slate-900 border border-slate-800 hover:border-amber-500/50 rounded-2xl p-5 flex flex-col justify-between transition group shadow-md"
             >
               <div>
-                <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center justify-between mb-3">
                   <span className="text-2xl">{award.icon}</span>
                   <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded bg-slate-800 text-slate-400 font-mono-code">
                     {award.category.replace('_', ' ')}
@@ -213,7 +230,7 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
               <div className="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs">
                 <span className="text-slate-500">Conferred To:</span>
                 <span className="font-semibold text-amber-200">
-                  {award.recipientName ? `${award.recipientName}` : `Team ${award.teamName}`}
+                  {award.recipientName ? award.recipientName : award.teamName ? `Team ${award.teamName}` : 'Awarded by Jury'}
                 </span>
               </div>
             </div>
@@ -221,13 +238,13 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
         </div>
       </div>
 
-      {/* Cohort Testimonials */}
+      {/* Program Leadership Statements */}
       <div className="pt-6 border-t border-slate-800">
         <h2 className="text-xl font-bold text-white font-royal mb-6 text-center">
-          Student Voices & Cohort Impact
+          Program Leadership & Mentorship
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {testimonials.map((t, idx) => (
+          {leadershipStatements.map((t, idx) => (
             <div key={idx} className="p-6 bg-slate-900 border border-slate-800 rounded-2xl flex flex-col justify-between">
               <p className="text-xs text-slate-300 italic font-serif-title leading-relaxed">
                 &ldquo;{t.quote}&rdquo;

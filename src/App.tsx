@@ -178,9 +178,6 @@ export default function App() {
         currentRole={currentRole}
         setCurrentRole={(role) => {
           setCurrentRole(role);
-          if (role === 'admin') {
-            setIsAdminLoggedIn(true);
-          }
         }}
         isAdminLoggedIn={isAdminLoggedIn}
         onAdminClick={handleAdminNavClick}
@@ -205,6 +202,7 @@ export default function App() {
           <CertificatesDirectory
             certificates={certificates}
             teams={teams}
+            isAdminLoggedIn={isAdminLoggedIn}
             onViewCertificate={(cert) => setSelectedCertificate(cert)}
             onOpenBulkModal={() => setBulkModalOpen(true)}
           />

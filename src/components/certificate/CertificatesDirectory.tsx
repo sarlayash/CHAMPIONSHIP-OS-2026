@@ -15,6 +15,7 @@ import {
 interface CertificatesDirectoryProps {
   certificates: CertificateRecord[];
   teams: Team[];
+  isAdminLoggedIn?: boolean;
   onViewCertificate: (cert: CertificateRecord) => void;
   onOpenBulkModal: () => void;
 }
@@ -22,6 +23,7 @@ interface CertificatesDirectoryProps {
 export const CertificatesDirectory: React.FC<CertificatesDirectoryProps> = ({
   certificates,
   teams,
+  isAdminLoggedIn = false,
   onViewCertificate,
   onOpenBulkModal,
 }) => {
@@ -66,13 +68,15 @@ export const CertificatesDirectory: React.FC<CertificatesDirectoryProps> = ({
           </p>
         </div>
 
-        <button
-          onClick={onOpenBulkModal}
-          className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition cursor-pointer"
-        >
-          <Layers className="w-4 h-4" />
-          Batch Issuance Engine
-        </button>
+        {isAdminLoggedIn && (
+          <button
+            onClick={onOpenBulkModal}
+            className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition cursor-pointer"
+          >
+            <Layers className="w-4 h-4" />
+            Batch Issuance Engine
+          </button>
+        )}
       </div>
 
       {/* Filter Toolbar */}

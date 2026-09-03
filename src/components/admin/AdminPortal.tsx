@@ -76,11 +76,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   onOpenBulkModal,
   onViewCertificate,
 }) => {
-  // Login form state - hardcoded to KAPILADMIN / ADMIN123
-  const [adminId, setAdminId] = useState('KAPILADMIN');
-  const [password, setPassword] = useState('ADMIN123');
+  // Login form state - clean, secure, no hardcoded credentials displayed in public
+  const [adminId, setAdminId] = useState('');
+  const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
-  const [showLoginManual, setShowLoginManual] = useState(false);
 
   // Admin tabs - defaulted to learners for direct CRUD access
   const [activeTab, setActiveTab] = useState<'learners' | 'teams' | 'certificates' | 'rubric' | 'audit' | 'settings' | 'manual'>('learners');
@@ -121,7 +120,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     setLoginError('');
     const success = onLogin(adminId.trim(), password.trim());
     if (!success) {
-      setLoginError('Invalid Administrator credentials. Required: KAPILADMIN / ADMIN123');
+      setLoginError('Invalid Administrator ID or Password. Access restricted to authorized personnel.');
     }
   };
 
@@ -317,7 +316,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 required
                 value={adminId}
                 onChange={(e) => setAdminId(e.target.value)}
-                placeholder="KAPILADMIN"
+                placeholder="Enter Administrator ID"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono-code focus:outline-none focus:border-amber-500"
               />
             </div>
@@ -331,7 +330,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="ADMIN123"
+                placeholder="••••••••"
                 className="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-700 text-white text-xs font-mono-code focus:outline-none focus:border-amber-500"
               />
             </div>
@@ -346,42 +345,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             </div>
           </form>
 
-          {/* Preset Credentials Hint per Codex prompt */}
-          <div className="mt-6 pt-4 border-t border-slate-800 text-center text-[11px] text-slate-400">
-            <p className="font-semibold text-slate-300">Hardcoded Administrator Credentials:</p>
-            <div className="mt-1.5 font-mono-code text-amber-300 flex justify-center gap-4 text-xs font-bold">
-              <span>Admin ID: <strong className="text-white">KAPILADMIN</strong></span>
-              <span>Password: <strong className="text-white">ADMIN123</strong></span>
+          {/* Secure Access Notice - No Credentials Showcased */}
+          <div className="mt-6 pt-4 border-t border-slate-800 text-center text-[11px] text-slate-500">
+            <div className="flex items-center justify-center gap-1.5 text-slate-400 font-medium">
+              <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+              <span>Restricted Access • Authorized Directorate Personnel Only</span>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setAdminId('KAPILADMIN');
-                setPassword('ADMIN123');
-              }}
-              className="mt-2.5 px-3 py-1 rounded bg-amber-500/20 text-[11px] text-amber-300 font-semibold border border-amber-500/30 hover:bg-amber-500/30 transition cursor-pointer"
-            >
-              Reset to KAPILADMIN / ADMIN123
-            </button>
-
-            <div className="mt-4 pt-3 border-t border-slate-800 text-center">
-              <button
-                type="button"
-                onClick={() => setShowLoginManual(!showLoginManual)}
-                className="text-xs text-amber-400 hover:text-amber-300 font-semibold flex items-center justify-center gap-1.5 mx-auto transition cursor-pointer"
-              >
-                <BookOpen className="w-3.5 h-3.5" />
-                {showLoginManual ? 'Hide Administrator Manual' : '📖 Read Administrator Manual Guide (SOP)'}
-              </button>
-            </div>
+            <p className="mt-1.5 text-[10px] text-slate-500 leading-relaxed">
+              Administrative credentials are confidential and issued by Sapthgiri NPS University Directorate. All sessions and actions are cryptographically signed.
+            </p>
           </div>
         </div>
-
-        {showLoginManual && (
-          <div className="mt-8">
-            <AdminUserManual />
-          </div>
-        )}
       </div>
     );
   }
@@ -400,7 +374,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 Administrator & Issuance Console
               </h1>
               <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-500/30">
-                KAPILADMIN Active
+                Admin Session Active
               </span>
             </div>
             <p className="text-xs text-slate-400">

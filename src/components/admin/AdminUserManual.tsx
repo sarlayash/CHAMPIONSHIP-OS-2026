@@ -156,35 +156,19 @@ export const AdminUserManual: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2.5">
               <span className="text-slate-400 font-semibold block text-[11px] uppercase tracking-wider">
-                Official Access Credentials
+                Confidential Access Protocols
               </span>
-              <div className="space-y-1.5 font-mono-code">
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Admin ID:</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-amber-300">KAPILADMIN</span>
-                    <button
-                      onClick={() => handleCopy('KAPILADMIN', 'admin_id')}
-                      className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
-                      title="Copy Admin ID"
-                    >
-                      <Copy className="w-3 h-3" />
-                    </button>
-                  </div>
+              <div className="p-3.5 rounded-lg bg-slate-900 border border-slate-800 space-y-2">
+                <div className="flex items-center gap-2 text-amber-300 font-bold">
+                  <Lock className="w-4 h-4 text-amber-400" />
+                  <span>Restricted Access Control (RBAC)</span>
                 </div>
-                <div className="flex items-center justify-between p-2 rounded bg-slate-900 border border-slate-800">
-                  <span className="text-slate-400">Master Password:</span>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-amber-300">ADMIN123</span>
-                    <button
-                      onClick={() => handleCopy('ADMIN123', 'admin_pw')}
-                      className="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white cursor-pointer"
-                      title="Copy Password"
-                    >
-                      <Copy className="w-3 h-3" />
-                    </button>
-                  </div>
-                </div>
+                <p className="text-[11px] text-slate-300 leading-relaxed">
+                  Administrator ID and authentication keys are strictly confidential and issued directly by the Sapthgiri NPS University Directorate to designated mentors and evaluators.
+                </p>
+                <p className="text-[11px] text-slate-400 italic">
+                  Never publish, share, or showcase credentials on public screens or distributed documentation.
+                </p>
               </div>
               <p className="text-[11px] text-slate-500">
                 Authorized for: Chief Mentors, Department Evaluators, and Championship Directors.
@@ -198,7 +182,7 @@ export const AdminUserManual: React.FC = () => {
               <ul className="space-y-1.5 text-slate-300">
                 <li className="flex items-start gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Instant Credential Autofill:</strong> Use the one-click "Reset to KAPILADMIN / ADMIN123" button on the login screen if needed.</span>
+                  <span><strong>Zero Public Credentials:</strong> Administrative access fields must always remain blank and unexposed to public visitors.</span>
                 </li>
                 <li className="flex items-start gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
@@ -206,7 +190,7 @@ export const AdminUserManual: React.FC = () => {
                 </li>
                 <li className="flex items-start gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                  <span><strong>Secure Sign-Out:</strong> Click the Logout icon in the upper-right corner whenever stepping away from the scoring workstation.</span>
+                  <span><strong>Secure Sign-Out:</strong> Click the Logout button in the upper-right corner whenever stepping away from the scoring workstation.</span>
                 </li>
               </ul>
             </div>
@@ -586,7 +570,7 @@ export const AdminUserManual: React.FC = () => {
           <span>Sapthgiri NPS University • Official Administrator Operating Manual 2026</span>
         </div>
         <span className="text-slate-500 font-mono-code text-[11px]">
-          Authored for KAPILADMIN • Last Revised: Day 13 Finale
+          Authored for Championship Directorate • Last Revised: Day 13 Finale
         </span>
       </div>
     </div>
@@ -597,14 +581,15 @@ const MANUAL_MARKDOWN_EXPORT = `# SAPTHGIRI NPS UNIVERSITY
 ## 13-Day Java Full Stack & DSA Championship 2026
 ### Official Administrator User Manual & Standard Operating Procedures (SOP)
 
-**Administrator Credentials:**
-- Admin ID: \`KAPILADMIN\`
-- Password: \`ADMIN123\`
+**Administrator Access Protocols:**
+- Access credentials are confidential and issued by the Championship Directorate.
+- Keep Administrator ID and Password strictly restricted to authorized staff.
+- Administrative access is required for Stage Scoring, Rubric Evaluations, and Credential Issuance.
 
 ---
 
 ### 1. Quick Start & Authentication
-Authorized access for Chief Mentors, Evaluators, and Championship Directors. Use the "Reset to KAPILADMIN / ADMIN123" button on the login screen for instant autofill.
+Authorized access for Chief Mentors, Evaluators, and Championship Directors. Enter your assigned Administrator ID and Password in the Admin Portal to gain console privileges.
 
 ### 2. Learners Management SOP (CRUD)
 - **Adding a Learner:**

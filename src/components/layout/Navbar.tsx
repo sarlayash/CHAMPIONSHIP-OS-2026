@@ -39,13 +39,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   ];
 
   const roles: { id: UserRole; label: string }[] = [
-    { id: 'admin', label: 'Admin (Kapil)' },
-    { id: 'judge', label: 'Judge' },
-    { id: 'mentor', label: 'Mentor' },
-    { id: 'faculty', label: 'Faculty' },
-    { id: 'team_leader', label: 'Team Leader' },
-    { id: 'participant', label: 'Learner' },
-    { id: 'guest', label: 'Guest' },
+    ...(isAdminLoggedIn ? [{ id: 'admin' as UserRole, label: 'Admin Console' }] : []),
+    { id: 'participant', label: 'Learner View' },
+    { id: 'team_leader', label: 'Team Leader View' },
+    { id: 'judge', label: 'Judge View' },
+    { id: 'mentor', label: 'Mentor View' },
+    { id: 'faculty', label: 'Faculty View' },
+    { id: 'guest', label: 'Guest View' },
   ];
 
   return (

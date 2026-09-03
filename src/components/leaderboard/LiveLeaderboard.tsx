@@ -46,6 +46,7 @@ export const LiveLeaderboard: React.FC<LiveLeaderboardProps> = ({
   const top3Teams = [...teams].sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 3);
   const sortedTeams = [...teams].sort((a, b) => b.totalPoints - a.totalPoints);
   const sortedParticipants = [...participants].sort((a, b) => b.totalPoints - a.totalPoints);
+  const hasTeamPoints = teams.some(t => t.totalPoints > 0);
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8">
@@ -65,13 +66,15 @@ export const LiveLeaderboard: React.FC<LiveLeaderboardProps> = ({
         </div>
 
         <div className="flex items-center gap-3">
-          <button
-            onClick={triggerConfetti}
-            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 hover:scale-105 active:scale-95 transition cursor-pointer"
-          >
-            <Sparkles className="w-4 h-4" />
-            Celebrate Top 3 Podium
-          </button>
+          {hasTeamPoints && (
+            <button
+              onClick={triggerConfetti}
+              className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-yellow-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 hover:scale-105 active:scale-95 transition cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4" />
+              Celebrate Top 3 Podium
+            </button>
+          )}
 
           <div className="p-1 bg-slate-900 border border-slate-800 rounded-xl flex items-center text-xs">
             <button
@@ -98,90 +101,106 @@ export const LiveLeaderboard: React.FC<LiveLeaderboardProps> = ({
         </div>
       </div>
 
-      {/* Top 3 Podium Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10 items-end">
-        {/* Rank 2 (Silver) */}
-        {top3Teams[1] && (
-          <div 
-            onClick={() => onSelectTeam(top3Teams[1])}
-            className="order-2 md:order-1 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-6 text-center shadow-xl hover:border-slate-500 transition cursor-pointer relative overflow-hidden group"
-          >
-            <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-slate-400 to-slate-200" />
-            <div className="w-12 h-12 rounded-full bg-slate-800 border-2 border-slate-400 text-slate-300 font-bold flex items-center justify-center mx-auto mb-3 text-lg shadow">
-              2
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-bold uppercase tracking-wider">
-              1st Runner-Up
-            </span>
-            <h3 className="text-xl font-bold text-white mt-2 group-hover:text-amber-400 transition">
-              {top3Teams[1].name}
-            </h3>
-            <p className="text-xs text-slate-400">Leader: {top3Teams[1].leaderName}</p>
-            <p className="text-2xl font-black text-slate-200 mt-3 font-mono-code">
-              {top3Teams[1].totalPoints.toLocaleString()} <span className="text-xs font-normal text-slate-400">pts</span>
-            </p>
-            <p className="text-[11px] text-amber-300/90 italic mt-2 line-clamp-1">
-              &ldquo;{top3Teams[1].projectTitle}&rdquo;
-            </p>
+      {/* Starting at Zero Notification when no points yet */}
+      {!hasTeamPoints && viewMode === 'teams' && (
+        <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 mb-8 text-center shadow-lg">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold mb-2">
+            <Sparkles className="w-3.5 h-3.5" />
+            Championship Commencing at Ground Zero
           </div>
-        )}
+          <h3 className="text-lg font-bold text-white">All 10 Teams Tied at 0 Points</h3>
+          <p className="text-xs text-slate-400 max-w-xl mx-auto mt-1">
+            Scores start clean from zero. Top 3 podium honors and dynamic rankings will populate automatically as stage challenges, quizzes, and Hackathon jury rubrics are recorded in the Admin Portal.
+          </p>
+        </div>
+      )}
 
-        {/* Rank 1 (Gold - Center & Elevated) */}
-        {top3Teams[0] && (
-          <div 
-            onClick={() => onSelectTeam(top3Teams[0])}
-            className="order-1 md:order-2 bg-gradient-to-b from-amber-950/40 via-slate-900 to-slate-900 border-2 border-amber-500 rounded-2xl p-7 text-center shadow-2xl hover:border-amber-400 transition cursor-pointer relative overflow-hidden group scale-105 z-10"
-          >
-            <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500" />
-            <div className="w-14 h-14 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center mx-auto mb-3 text-xl shadow-lg shadow-amber-500/40">
-              <Crown className="w-8 h-8" />
+      {/* Top 3 Podium Cards (Shown only when teams have points) */}
+      {hasTeamPoints && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-10 items-end">
+          {/* Rank 2 (Silver) */}
+          {top3Teams[1] && (
+            <div 
+              onClick={() => onSelectTeam(top3Teams[1])}
+              className="order-2 md:order-1 bg-slate-900/90 border border-slate-700/80 rounded-2xl p-6 text-center shadow-xl hover:border-slate-500 transition cursor-pointer relative overflow-hidden group"
+            >
+              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-slate-400 to-slate-200" />
+              <div className="w-12 h-12 rounded-full bg-slate-800 border-2 border-slate-400 text-slate-300 font-bold flex items-center justify-center mx-auto mb-3 text-lg shadow">
+                2
+              </div>
+              <span className="px-2.5 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px] font-bold uppercase tracking-wider">
+                1st Runner-Up
+              </span>
+              <h3 className="text-xl font-bold text-white mt-2 group-hover:text-amber-400 transition">
+                {top3Teams[1].name}
+              </h3>
+              <p className="text-xs text-slate-400">Leader: {top3Teams[1].leaderName}</p>
+              <p className="text-2xl font-black text-slate-200 mt-3 font-mono-code">
+                {top3Teams[1].totalPoints.toLocaleString()} <span className="text-xs font-normal text-slate-400">pts</span>
+              </p>
+              <p className="text-[11px] text-amber-300/90 italic mt-2 line-clamp-1">
+                &ldquo;{top3Teams[1].projectTitle}&rdquo;
+              </p>
             </div>
-            <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
-              🏆 Grand Champion Team
-            </span>
-            <h3 className="text-2xl font-black text-white mt-2 group-hover:text-amber-300 transition font-royal">
-              {top3Teams[0].name}
-            </h3>
-            <p className="text-xs text-slate-300">Captain: {top3Teams[0].leaderName}</p>
-            <p className="text-3xl font-black text-amber-400 mt-3 font-mono-code drop-shadow">
-              {top3Teams[0].totalPoints.toLocaleString()} <span className="text-xs font-normal text-slate-400">pts</span>
-            </p>
-            <p className="text-xs text-amber-200/90 italic mt-2">
-              &ldquo;{top3Teams[0].projectTitle}&rdquo;
-            </p>
-            <div className="mt-4 pt-3 border-t border-amber-500/20 flex items-center justify-center gap-1.5 text-xs text-amber-300 font-semibold">
-              <span>View Dossier</span>
-              <ChevronRight className="w-4 h-4" />
-            </div>
-          </div>
-        )}
+          )}
 
-        {/* Rank 3 (Bronze) */}
-        {top3Teams[2] && (
-          <div 
-            onClick={() => onSelectTeam(top3Teams[2])}
-            className="order-3 bg-slate-900/90 border border-amber-800/60 rounded-2xl p-6 text-center shadow-xl hover:border-amber-700 transition cursor-pointer relative overflow-hidden group"
-          >
-            <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-700 to-amber-600" />
-            <div className="w-12 h-12 rounded-full bg-amber-950 border-2 border-amber-700 text-amber-300 font-bold flex items-center justify-center mx-auto mb-3 text-lg shadow">
-              3
+          {/* Rank 1 (Gold - Center & Elevated) */}
+          {top3Teams[0] && (
+            <div 
+              onClick={() => onSelectTeam(top3Teams[0])}
+              className="order-1 md:order-2 bg-gradient-to-b from-amber-950/40 via-slate-900 to-slate-900 border-2 border-amber-500 rounded-2xl p-7 text-center shadow-2xl hover:border-amber-400 transition cursor-pointer relative overflow-hidden group scale-105 z-10"
+            >
+              <div className="absolute top-0 inset-x-0 h-2 bg-gradient-to-r from-amber-400 via-yellow-300 to-amber-500" />
+              <div className="w-14 h-14 rounded-full bg-amber-500 text-slate-950 font-black flex items-center justify-center mx-auto mb-3 text-xl shadow-lg shadow-amber-500/40">
+                <Crown className="w-8 h-8" />
+              </div>
+              <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-bold uppercase tracking-wider">
+                🏆 Grand Champion Team
+              </span>
+              <h3 className="text-2xl font-black text-white mt-2 group-hover:text-amber-300 transition font-royal">
+                {top3Teams[0].name}
+              </h3>
+              <p className="text-xs text-slate-300">Captain: {top3Teams[0].leaderName}</p>
+              <p className="text-3xl font-black text-amber-400 mt-3 font-mono-code drop-shadow">
+                {top3Teams[0].totalPoints.toLocaleString()} <span className="text-xs font-normal text-slate-400">pts</span>
+              </p>
+              <p className="text-xs text-amber-200/90 italic mt-2">
+                &ldquo;{top3Teams[0].projectTitle}&rdquo;
+              </p>
+              <div className="mt-4 pt-3 border-t border-amber-500/20 flex items-center justify-center gap-1.5 text-xs text-amber-300 font-semibold">
+                <span>View Dossier</span>
+                <ChevronRight className="w-4 h-4" />
+              </div>
             </div>
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-950 text-amber-400 text-[10px] font-bold uppercase tracking-wider">
-              2nd Runner-Up
-            </span>
-            <h3 className="text-xl font-bold text-white mt-2 group-hover:text-amber-400 transition">
-              {top3Teams[2].name}
-            </h3>
-            <p className="text-xs text-slate-400">Leader: {top3Teams[2].leaderName}</p>
-            <p className="text-2xl font-black text-slate-200 mt-3 font-mono-code">
-              {top3Teams[2].totalPoints.toLocaleString()} <span className="text-xs font-normal text-slate-400">pts</span>
-            </p>
-            <p className="text-[11px] text-amber-300/90 italic mt-2 line-clamp-1">
-              &ldquo;{top3Teams[2].projectTitle}&rdquo;
-            </p>
-          </div>
-        )}
-      </div>
+          )}
+
+          {/* Rank 3 (Bronze) */}
+          {top3Teams[2] && (
+            <div 
+              onClick={() => onSelectTeam(top3Teams[2])}
+              className="order-3 bg-slate-900/90 border border-amber-800/60 rounded-2xl p-6 text-center shadow-xl hover:border-amber-700 transition cursor-pointer relative overflow-hidden group"
+            >
+              <div className="absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r from-amber-700 to-amber-600" />
+              <div className="w-12 h-12 rounded-full bg-amber-950 border-2 border-amber-700 text-amber-300 font-bold flex items-center justify-center mx-auto mb-3 text-lg shadow">
+                3
+              </div>
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-950 text-amber-400 text-[10px] font-bold uppercase tracking-wider">
+                2nd Runner-Up
+              </span>
+              <h3 className="text-xl font-bold text-white mt-2 group-hover:text-amber-400 transition">
+                {top3Teams[2].name}
+              </h3>
+              <p className="text-xs text-slate-400">Leader: {top3Teams[2].leaderName}</p>
+              <p className="text-2xl font-black text-slate-200 mt-3 font-mono-code">
+                {top3Teams[2].totalPoints.toLocaleString()} <span className="text-xs font-normal text-slate-400">pts</span>
+              </p>
+              <p className="text-[11px] text-amber-300/90 italic mt-2 line-clamp-1">
+                &ldquo;{top3Teams[2].projectTitle}&rdquo;
+              </p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Main Leaderboard Table */}
       <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">

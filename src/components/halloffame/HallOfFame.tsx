@@ -134,7 +134,7 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
         )}
 
         {/* Champion Team */}
-        {championTeam && (
+        {championTeam && championTeam.totalPoints > 0 ? (
           <div className="bg-gradient-to-br from-indigo-950/40 via-slate-900 to-slate-950 border-2 border-indigo-500/60 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl" />
             <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold uppercase tracking-wider mb-3">
@@ -160,9 +160,7 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
               </div>
             </div>
             <p className="text-xs text-slate-300 italic font-serif-title leading-relaxed">
-              {championTeam.totalPoints > 0
-                ? "Demonstrated exemplary collaborative engineering and algorithmic performance throughout the 13-day championship."
-                : "Official team standings and score metrics will reflect in real time as the administrator inputs individual learner scores and stage challenge points."}
+              Demonstrated exemplary collaborative engineering and algorithmic performance throughout the 13-day championship.
             </p>
             <button
               onClick={() => onSelectTeam(championTeam)}
@@ -170,6 +168,16 @@ export const HallOfFame: React.FC<HallOfFameProps> = ({
             >
               View Team Dossier & Project
             </button>
+          </div>
+        ) : (
+          <div className="bg-slate-900/80 border-2 border-dashed border-slate-700 rounded-3xl p-6 md:p-8 text-center flex flex-col items-center justify-center space-y-3">
+            <div className="w-14 h-14 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 flex items-center justify-center">
+              <Crown className="w-7 h-7" />
+            </div>
+            <h3 className="text-xl font-bold text-white font-royal">Champion Team Title Reserved</h3>
+            <p className="text-xs text-slate-400 max-w-sm">
+              All 10 official teams start cleanly from zero points. As stage assessments and hackathon rubric scores are recorded by the administration, the #1 champion team will be crowned here.
+            </p>
           </div>
         )}
       </div>

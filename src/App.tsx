@@ -37,7 +37,7 @@ export default function App() {
   // Entities State with persistent local storage
   const [teams, setTeams] = useState<Team[]>(() => {
     try {
-      const saved = localStorage.getItem('championshipos_v3_teams');
+      const saved = localStorage.getItem('championshipos_clean_zero_teams');
       return saved ? JSON.parse(saved) : TEAMS_DATA;
     } catch {
       return TEAMS_DATA;
@@ -45,7 +45,7 @@ export default function App() {
   });
   const [participants, setParticipants] = useState<Participant[]>(() => {
     try {
-      const saved = localStorage.getItem('championshipos_v3_participants');
+      const saved = localStorage.getItem('championshipos_clean_zero_participants');
       return saved ? JSON.parse(saved) : PARTICIPANTS_DATA;
     } catch {
       return PARTICIPANTS_DATA;
@@ -53,7 +53,7 @@ export default function App() {
   });
   const [certificates, setCertificates] = useState<CertificateRecord[]>(() => {
     try {
-      const saved = localStorage.getItem('championshipos_v3_certificates');
+      const saved = localStorage.getItem('championshipos_clean_zero_certificates');
       return saved ? JSON.parse(saved) : INITIAL_CERTIFICATES;
     } catch {
       return INITIAL_CERTIFICATES;
@@ -61,7 +61,7 @@ export default function App() {
   });
   const [settings, setSettings] = useState<ChampionshipSettings>(() => {
     try {
-      const saved = localStorage.getItem('championshipos_v3_settings');
+      const saved = localStorage.getItem('championshipos_clean_zero_settings');
       return saved ? JSON.parse(saved) : INITIAL_SETTINGS;
     } catch {
       return INITIAL_SETTINGS;
@@ -71,12 +71,18 @@ export default function App() {
   // Purge any legacy mock storage keys
   useEffect(() => {
     try {
-      localStorage.removeItem('championship_teams');
-      localStorage.removeItem('championship_participants');
-      localStorage.removeItem('championship_certificates');
-      localStorage.removeItem('championship_settings');
-      localStorage.removeItem('championshipos_real_teams');
-      localStorage.removeItem('championshipos_real_participants');
+      [
+        'championship_teams',
+        'championship_participants',
+        'championship_certificates',
+        'championship_settings',
+        'championshipos_real_teams',
+        'championshipos_real_participants',
+        'championshipos_v3_teams',
+        'championshipos_v3_participants',
+        'championshipos_v3_certificates',
+        'championshipos_v3_settings',
+      ].forEach(k => localStorage.removeItem(k));
     } catch {
       // ignore
     }
@@ -85,7 +91,7 @@ export default function App() {
   // Save updates to localStorage so real admin data persists across reloads
   useEffect(() => {
     try {
-      localStorage.setItem('championshipos_v3_teams', JSON.stringify(teams));
+      localStorage.setItem('championshipos_clean_zero_teams', JSON.stringify(teams));
     } catch (e) {
       console.error(e);
     }
@@ -93,7 +99,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('championshipos_v3_participants', JSON.stringify(participants));
+      localStorage.setItem('championshipos_clean_zero_participants', JSON.stringify(participants));
     } catch (e) {
       console.error(e);
     }
@@ -101,7 +107,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('championshipos_v3_certificates', JSON.stringify(certificates));
+      localStorage.setItem('championshipos_clean_zero_certificates', JSON.stringify(certificates));
     } catch (e) {
       console.error(e);
     }
@@ -109,7 +115,7 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('championshipos_v3_settings', JSON.stringify(settings));
+      localStorage.setItem('championshipos_clean_zero_settings', JSON.stringify(settings));
     } catch (e) {
       console.error(e);
     }

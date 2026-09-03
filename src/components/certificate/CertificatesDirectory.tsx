@@ -41,7 +41,7 @@ export const CertificatesDirectory: React.FC<CertificatesDirectoryProps> = ({
 
   const categories: { id: string; label: string }[] = [
     { id: 'all', label: 'All Certificates' },
-    { id: 'participation', label: '📜 Participation (All 56)' },
+    { id: 'participation', label: '📜 Participation' },
     { id: 'merit', label: '🏅 Merit Distinctions' },
     { id: 'excellence', label: '🌟 Excellence Honors' },
     { id: 'winner', label: '🏆 Championship Winners' },
@@ -62,7 +62,7 @@ export const CertificatesDirectory: React.FC<CertificatesDirectoryProps> = ({
             Issued Digital Certificates
           </h1>
           <p className="text-xs text-slate-400 mt-1">
-            Displaying {filtered.length} verified credentials out of {certificates.length} total issued. Guaranteed coverage for all 56 learners across 10 teams.
+            Displaying {filtered.length} verified credentials out of {certificates.length} total issued. Zero simulated credentials — only administrator-authorized certificates appear here.
           </p>
         </div>
 
@@ -218,8 +218,14 @@ export const CertificatesDirectory: React.FC<CertificatesDirectoryProps> = ({
       {filtered.length === 0 && (
         <div className="p-12 text-center bg-slate-900 border border-slate-800 rounded-2xl">
           <Award className="w-12 h-12 text-slate-600 mx-auto mb-3" />
-          <h3 className="text-base font-bold text-white">No Certificates Match Filter</h3>
-          <p className="text-xs text-slate-400 mt-1">Try resetting the team or search terms.</p>
+          <h3 className="text-base font-bold text-white">
+            {certificates.length === 0 ? 'No Certificates Issued Yet' : 'No Certificates Match Filter'}
+          </h3>
+          <p className="text-xs text-slate-400 mt-1 max-w-md mx-auto">
+            {certificates.length === 0
+              ? 'The repository is starting clean from zero. Once credentials are created and authorized via the Bulk Issuance Engine or Admin Portal, authentic certificates will be listed here with instant QR and hash verification.'
+              : 'Try resetting the category filter, team selection, or search query.'}
+          </p>
         </div>
       )}
     </div>

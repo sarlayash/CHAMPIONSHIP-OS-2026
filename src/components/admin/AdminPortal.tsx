@@ -31,7 +31,8 @@ import {
   Save,
   BookOpen,
   ChevronDown,
-  FileSpreadsheet
+  FileSpreadsheet,
+  AlertTriangle
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { exportParticipantsCSV, exportTeamsCSV, exportCertificatesCSV } from '../../utils/csvExport';
@@ -89,17 +90,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [filterCategory, setFilterCategory] = useState<string>('all');
   const [filterTeam, setFilterTeam] = useState<string>('all');
 
-  // Rubric evaluation state
+  // Rubric evaluation state (Starts strictly at zero)
   const [evalTeamId, setEvalTeamId] = useState<string>(teams[0]?.id || '');
   const [rubricScores, setRubricScores] = useState<Record<string, number>>({
-    'rb-1': 24,
-    'rb-2': 19,
-    'rb-3': 15,
-    'rb-4': 14,
-    'rb-5': 15,
-    'rb-6': 9,
+    'rb-1': 0,
+    'rb-2': 0,
+    'rb-3': 0,
+    'rb-4': 0,
+    'rb-5': 0,
+    'rb-6': 0,
   });
-  const [evalFeedback, setEvalFeedback] = useState('Excellent algorithmic optimization and clear modular design.');
+  const [evalFeedback, setEvalFeedback] = useState('');
   const [rubricSavedToast, setRubricSavedToast] = useState(false);
 
   // Settings form state
@@ -252,6 +253,36 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     setSettings(tempSettings);
     setSettingsSavedToast(true);
     setTimeout(() => setSettingsSavedToast(false), 2500);
+  };
+
+  // Explicit Reset to Ground Zero (0 Scores, 0 Certificates)
+  const handleResetToGroundZero = () => {
+    const confirmation = prompt('Type "RESET ZERO" to confirm resetting all team points to 0, clearing all certificates, and wiping all participant rosters:');
+    if (confirmation === 'RESET ZERO') {
+      setTeams(prev => prev.map(t => ({
+        ...t,
+        rank: 1,
+        totalPoints: 0,
+        memberCount: 0,
+        stageScores: {
+          learningLeague: 0,
+          codingBattle: 0,
+          quizKahoot: 0,
+          hackathonFinale: 0,
+        },
+        rubricScore: 0,
+        judgeFeedback: 'Awaiting jury evaluation.',
+        awardedTitles: [],
+      })));
+      setParticipants([]);
+      setCertificates([]);
+      try {
+        localStorage.clear();
+      } catch {
+        // ignore
+      }
+      alert('Championship OS has been reset to ground zero: 0 points, 0 certificates, and 0 registered participants.');
+    }
   };
 
   // If Not logged in, render the secure Admin Login card
@@ -1013,6 +1044,30 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               <Save className="w-4 h-4" />
               Save Configuration
             </button>
+          </div>
+
+          {/* DANGER ZONE / GROUND ZERO PURGE */}
+          <div className="mt-8 pt-6 border-t border-red-900/40 bg-red-950/20 border rounded-2xl p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h3 className="text-sm font-bold text-red-300 flex items-center gap-1.5">
+                  <AlertTriangle className="w-4 h-4 text-red-400" />
+                  Ground Zero Reset Engine
+                </h3>
+                <p className="text-[11px] text-slate-400 mt-1 max-w-xl">
+                  Enforce a clean slate: Reset all 10 teams to 0 total points, clear all stage breakdowns, empty the digital certificates repository, and wipe all local rosters.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleResetToGroundZero}
+                className="px-4 py-2.5 rounded-xl bg-red-900/50 hover:bg-red-800/60 text-red-200 border border-red-500/40 text-xs font-bold transition flex items-center gap-2 shrink-0 cursor-pointer"
+              >
+                <Trash2 className="w-4 h-4 text-red-400" />
+                Reset Everything to Zero
+              </button>
+            </div>
           </div>
         </form>
       )}

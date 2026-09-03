@@ -1,6 +1,8 @@
 {
   "name": "ChampionshipOS - Certificate Issuance Platform",
-  "description": "Certificate issuance and championship management platform for India's 13-Day Java DSA Championship 2026, Sapthgiri NPS University, featuring 10 teams, 56 learners, digital certificates, badges, live leaderboards, and role-based access.",
+  "description": "Official certificate issuance and championship management platform for India's 13-Day Java DSA Championship 2026 at Sapthgiri NPS University, featuring 10 official teams, real-time score tracking, verified digital credentials, live leaderboards, and administrative controls.",
   "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
 }

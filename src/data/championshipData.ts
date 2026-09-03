@@ -409,17 +409,17 @@ export const AWARDS_DATA: AwardItem[] = [
   { id: "cc-4", title: "Live Coding Champion", category: "competition", icon: "💻", description: "Live coded solutions on the main stage before judges with zero compilation errors." },
   { id: "cc-5", title: "Challenge Master", category: "competition", icon: "🧩", description: "Completed all bonus weekend algorithmic boss challenges." },
 
-  // Team Championship Awards (10 Teams)
-  { id: "tc-1", title: "Champion Team", category: "team", icon: "🏆", description: "Overall Champions of the 13-Day Java DSA Championship 2026.", teamName: "Toxicos" },
-  { id: "tc-2", title: "First Runner-Up Team", category: "team", icon: "🥈", description: "2nd place in overall championship points and hackathon score.", teamName: "TechTok" },
-  { id: "tc-3", title: "Second Runner-Up Team", category: "team", icon: "🥉", description: "3rd place in overall championship points and hackathon score.", teamName: "Triple Bytes" },
-  { id: "tc-4", title: "Best Innovation Team", category: "team", icon: "💡", description: "Most inventive and groundbreaking algorithmic architecture.", teamName: "TechTok" },
-  { id: "tc-5", title: "Best Technical Solution", category: "team", icon: "💻", description: "Exceptional code quality, concurrency handling, and performance metrics.", teamName: "Toxicos" },
-  { id: "tc-6", title: "Best Project Demonstration", category: "team", icon: "🎤", description: "Most persuasive, polished, and comprehensive live stage demo.", teamName: "Triple Bytes" },
-  { id: "tc-7", title: "Best Industry Impact", category: "team", icon: "🚀", description: "Solution with highest commercial relevance and production readiness.", teamName: "Shenex" },
-  { id: "tc-8", title: "Best Problem Statement", category: "team", icon: "🎯", description: "Most rigorous, challenging, and well-framed engineering scope.", teamName: "Apex" },
-  { id: "tc-9", title: "Best Team Collaboration", category: "team", icon: "🤝", description: "Supreme coordination, git workflow discipline, and peer synergy.", teamName: "Mad" },
-  { id: "tc-10", title: "People's Choice Team", category: "team", icon: "⭐", description: "Voted favorite project and presentation by the cohort.", teamName: "Byte Force" }
+  // Team Championship Awards (10 Teams - Awarded upon Jury & Points evaluation)
+  { id: "tc-1", title: "Champion Team", category: "team", icon: "🏆", description: "Overall Champions of the 13-Day Java DSA Championship 2026." },
+  { id: "tc-2", title: "First Runner-Up Team", category: "team", icon: "🥈", description: "2nd place in overall championship points and hackathon score." },
+  { id: "tc-3", title: "Second Runner-Up Team", category: "team", icon: "🥉", description: "3rd place in overall championship points and hackathon score." },
+  { id: "tc-4", title: "Best Innovation Team", category: "team", icon: "💡", description: "Most inventive and groundbreaking algorithmic architecture." },
+  { id: "tc-5", title: "Best Technical Solution", category: "team", icon: "💻", description: "Exceptional code quality, concurrency handling, and performance metrics." },
+  { id: "tc-6", title: "Best Project Demonstration", category: "team", icon: "🎤", description: "Most persuasive, polished, and comprehensive live stage demo." },
+  { id: "tc-7", title: "Best Industry Impact", category: "team", icon: "🚀", description: "Solution with highest commercial relevance and production readiness." },
+  { id: "tc-8", title: "Best Problem Statement", category: "team", icon: "🎯", description: "Most rigorous, challenging, and well-framed engineering scope." },
+  { id: "tc-9", title: "Best Team Collaboration", category: "team", icon: "🤝", description: "Supreme coordination, git workflow discipline, and peer synergy." },
+  { id: "tc-10", title: "People's Choice Team", category: "team", icon: "⭐", description: "Voted favorite project and presentation by the cohort." }
 ];
 
 export const RUBRIC_CRITERIA: RubricCriterion[] = [

@@ -28,12 +28,14 @@ import {
   LogOut,
   RefreshCw,
   Sparkles,
-  Save
+  Save,
+  BookOpen
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { LearnersManager } from './LearnersManager';
 import { TeamsManager } from './TeamsManager';
 import { RealNumbersAudit } from './RealNumbersAudit';
+import { AdminUserManual } from './AdminUserManual';
 
 interface AdminPortalProps {
   isAdminLoggedIn: boolean;
@@ -74,9 +76,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [adminId, setAdminId] = useState('KAPILADMIN');
   const [password, setPassword] = useState('ADMIN123');
   const [loginError, setLoginError] = useState('');
+  const [showLoginManual, setShowLoginManual] = useState(false);
 
   // Admin tabs - defaulted to learners for direct CRUD access
-  const [activeTab, setActiveTab] = useState<'learners' | 'teams' | 'certificates' | 'rubric' | 'audit' | 'settings'>('learners');
+  const [activeTab, setActiveTab] = useState<'learners' | 'teams' | 'certificates' | 'rubric' | 'audit' | 'settings' | 'manual'>('learners');
 
   // Search & Filters for certificates
   const [searchCertQuery, setSearchCertQuery] = useState('');
@@ -301,8 +304,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             >
               Reset to KAPILADMIN / ADMIN123
             </button>
+
+            <div className="mt-4 pt-3 border-t border-slate-800 text-center">
+              <button
+                type="button"
+                onClick={() => setShowLoginManual(!showLoginManual)}
+                className="text-xs text-amber-400 hover:text-amber-300 font-semibold flex items-center justify-center gap-1.5 mx-auto transition cursor-pointer"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                {showLoginManual ? 'Hide Administrator Manual' : '📖 Read Administrator Manual Guide (SOP)'}
+              </button>
+            </div>
           </div>
         </div>
+
+        {showLoginManual && (
+          <div className="mt-8">
+            <AdminUserManual />
+          </div>
+        )}
       </div>
     );
   }
@@ -331,6 +351,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         </div>
 
         <div className="flex items-center gap-2.5">
+          <button
+            onClick={() => setActiveTab('manual')}
+            className={`px-3.5 py-2.5 rounded-xl text-xs font-semibold flex items-center gap-2 transition cursor-pointer ${
+              activeTab === 'manual'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-lg shadow-amber-500/20'
+                : 'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700'
+            }`}
+          >
+            <BookOpen className="w-4 h-4 text-amber-400" />
+            Admin Manual
+          </button>
+
           <button
             onClick={onOpenBulkModal}
             className="px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs flex items-center gap-2 shadow-lg shadow-amber-500/20 transition cursor-pointer"
@@ -468,6 +500,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
         >
           <SettingsIcon className="w-4 h-4" />
           Championship Config
+        </button>
+
+        <button
+          onClick={() => setActiveTab('manual')}
+          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 cursor-pointer ${
+            activeTab === 'manual'
+              ? 'bg-amber-500 text-slate-950'
+              : 'text-slate-400 hover:text-white hover:bg-slate-800'
+          }`}
+        >
+          <BookOpen className="w-4 h-4" />
+          Admin User Manual (SOP)
         </button>
       </div>
 
@@ -838,6 +882,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             </button>
           </div>
         </form>
+      )}
+
+      {/* TAB: ADMIN USER MANUAL & SOP */}
+      {activeTab === 'manual' && (
+        <AdminUserManual />
       )}
 
       {/* SINGLE CERTIFICATE CREATOR MODAL */}

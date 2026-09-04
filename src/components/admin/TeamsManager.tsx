@@ -20,7 +20,8 @@ import {
   Download,
   Star,
   UserPlus,
-  Check
+  Check,
+  Award
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { exportTeamsCSV } from '../../utils/csvExport';
@@ -35,6 +36,7 @@ interface TeamsManagerProps {
   setCertificates: React.Dispatch<React.SetStateAction<CertificateRecord[]>>;
   settings: ChampionshipSettings;
   setSettings: React.Dispatch<React.SetStateAction<ChampionshipSettings>>;
+  onOpenBulkModal?: (mode?: 'all' | 'team' | 'individual', teamId?: string, participantId?: string) => void;
 }
 
 export const TeamsManager: React.FC<TeamsManagerProps> = ({
@@ -46,6 +48,7 @@ export const TeamsManager: React.FC<TeamsManagerProps> = ({
   setCertificates,
   settings,
   setSettings,
+  onOpenBulkModal,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'rank' | 'points' | 'members' | 'rubric'>('rank');
@@ -736,6 +739,17 @@ export const TeamsManager: React.FC<TeamsManagerProps> = ({
                     <Star className="w-3.5 h-3.5 fill-amber-400/30" />
                     <span>⭐ Bonus</span>
                   </button>
+
+                  {onOpenBulkModal && (
+                    <button
+                      onClick={() => onOpenBulkModal('team', team.id)}
+                      className="px-2.5 py-1.5 rounded-lg bg-[#d4af37]/15 hover:bg-[#d4af37]/30 text-[#ffd700] hover:text-white border border-[#d4af37]/40 text-[11px] font-bold flex items-center gap-1 transition cursor-pointer"
+                      title="Issue Team Certificates (Black & Gold Theme)"
+                    >
+                      <Award className="w-3.5 h-3.5 text-[#ffd700]" />
+                      <span>Issue Certs</span>
+                    </button>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-1.5">

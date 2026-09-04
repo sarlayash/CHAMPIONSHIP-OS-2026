@@ -32,7 +32,9 @@ import {
   BookOpen,
   ChevronDown,
   FileSpreadsheet,
-  AlertTriangle
+  AlertTriangle,
+  User,
+  Award
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { exportParticipantsCSV, exportTeamsCSV, exportCertificatesCSV } from '../../utils/csvExport';
@@ -55,7 +57,7 @@ interface AdminPortalProps {
   setSettings: React.Dispatch<React.SetStateAction<ChampionshipSettings>>;
   rubricCriteria: RubricCriterion[];
   awards: AwardItem[];
-  onOpenBulkModal: () => void;
+  onOpenBulkModal: (mode?: 'all' | 'team' | 'individual', teamId?: string, participantId?: string) => void;
   onViewCertificate: (cert: CertificateRecord) => void;
 }
 
@@ -163,9 +165,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       achievementSubtitle: newCertSubtitle,
       citation: newCertCitation,
       issueDate: "February 22, 2026",
-      signatory1: { name: settings.directorName, title: settings.directorTitle },
-      signatory2: { name: settings.deanName, title: settings.deanTitle },
-      signatory3: { name: settings.vcName, title: settings.vcTitle },
+      // Exclusively Kapil Narula - NO DEAN OR SENIORS
+      signatory1: { 
+        name: "Kapil Narula", 
+        title: "Program Mentor & Lead Enterprise Architect" 
+      },
+      signatory2: { 
+        name: "Mentorship by Kapil", 
+        title: "Technical Mentorship & Industry Authority" 
+      },
+      signatory3: { 
+        name: "Industry Oriented Training (IOT)", 
+        title: "Official Championship Credential Registry" 
+      },
       qrVerificationUrl: `${settings.verificationBaseUrl}${certNo}`,
       status: 'issued',
       downloadCount: 0
@@ -665,9 +677,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           settings={settings}
           setSettings={setSettings}
           onIssueCertificateForLearner={(learner) => {
-            setNewCertStudentId(learner.id);
-            setSingleIssueOpen(true);
-            setActiveTab('certificates');
+            onOpenBulkModal('individual', undefined, learner.id);
           }}
         />
       )}
@@ -715,13 +725,35 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </select>
             </div>
 
-            <button
-              onClick={() => setSingleIssueOpen(true)}
-              className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-lg flex items-center gap-1.5 transition cursor-pointer"
-            >
-              <Plus className="w-4 h-4" />
-              Issue Single Certificate
-            </button>
+            {/* THREE ISSUANCE OPTIONS: ALL LEARNERS, TEAM-WISE, INDIVIDUAL */}
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                onClick={() => onOpenBulkModal('all')}
+                className="px-3.5 py-2 bg-gradient-to-r from-[#ffd700] to-[#d4af37] hover:brightness-110 text-slate-950 font-bold text-xs rounded-xl flex items-center gap-1.5 transition shadow-sm cursor-pointer"
+                title="Issue certificates to all cohort learners"
+              >
+                <Users className="w-3.5 h-3.5 text-slate-950" />
+                <span>Issue to All Learners</span>
+              </button>
+
+              <button
+                onClick={() => onOpenBulkModal('team')}
+                className="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 transition shadow-sm cursor-pointer"
+                title="Issue certificates team-wise"
+              >
+                <Layers className="w-3.5 h-3.5" />
+                <span>Issue Team-Wise</span>
+              </button>
+
+              <button
+                onClick={() => onOpenBulkModal('individual')}
+                className="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs rounded-xl flex items-center gap-1.5 transition shadow-sm cursor-pointer"
+                title="Issue individual student certificate"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>Issue Individual</span>
+              </button>
+            </div>
           </div>
 
           {/* Table */}
@@ -918,6 +950,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           setCertificates={setCertificates}
           settings={settings}
           setSettings={setSettings}
+          onOpenBulkModal={onOpenBulkModal}
         />
       )}
 
@@ -980,12 +1013,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             </div>
 
             <div>
-              <label className="block text-slate-300 font-semibold mb-1">Dean / University Signatory</label>
+              <label className="block text-slate-300 font-semibold mb-1">Credential Signatory Authority</label>
               <input
                 type="text"
-                value={tempSettings.deanName}
-                onChange={(e) => setTempSettings({ ...tempSettings, deanName: e.target.value })}
-                className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white"
+                value="Mentorship by Kapil (Exclusively Kapil Narula - Lead Program Mentor)"
+                readOnly
+                disabled
+                className="w-full px-3.5 py-2 bg-slate-950/60 border border-slate-800 rounded-lg text-amber-400 font-medium cursor-not-allowed"
               />
             </div>
           </div>

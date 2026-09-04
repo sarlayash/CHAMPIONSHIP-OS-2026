@@ -64,25 +64,56 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     setTimeout(() => {
       const node = document.getElementById(`certificate-node-${certificate.certificateNo}`);
       if (node) {
-        // We can create a simple printable download or export
+        // High fidelity printable export preserving the Black & Gold luxury styling
         const printWindow = window.open('', '_blank');
         if (printWindow) {
           printWindow.document.write(`
+            <!DOCTYPE html>
             <html>
               <head>
-                <title>${certificate.participantName} - ${certificate.title}</title>
+                <title>${certificate.participantName} - ${certificate.title} (Mentorship by Kapil)</title>
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-                <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+                <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+                <script src="https://cdn.tailwindcss.com"></script>
                 <style>
-                  body { margin: 0; padding: 20px; background: #0c1222; font-family: system-ui, sans-serif; display: flex; justify-content: center; }
-                  @media print { body { padding: 0; background: white; } }
+                  @page {
+                    size: A4 landscape;
+                    margin: 8mm;
+                  }
+                  body {
+                    margin: 0;
+                    padding: 20px;
+                    background: #020306;
+                    color: #fff;
+                    font-family: system-ui, sans-serif;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-height: 100vh;
+                    -webkit-print-color-adjust: exact !important;
+                    print-color-adjust: exact !important;
+                  }
+                  @media print {
+                    body {
+                      padding: 0;
+                      background: #020306 !important;
+                      -webkit-print-color-adjust: exact !important;
+                      print-color-adjust: exact !important;
+                    }
+                  }
                 </style>
               </head>
               <body>
-                ${node.outerHTML}
+                <div style="width: 100%; max-width: 1050px;">
+                  ${node.outerHTML}
+                </div>
                 <script>
-                  window.onload = function() { window.print(); }
+                  window.onload = function() {
+                    setTimeout(function() {
+                      window.print();
+                    }, 600);
+                  };
                 </script>
               </body>
             </html>
@@ -105,14 +136,14 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
   const handleShareLinkedIn = () => {
     const text = encodeURIComponent(
-      `Excited to receive the official "${certificate.title}" (${certificate.achievementSubtitle}) from Sapthgiri NPS University and Industry Oriented Training (IOT) Powered by Kapil Narula at India's 13-Day Java DSA Championship 2026! 🚀\n\nVerified Credential ID: ${certificate.certificateNo}\nVerify here: ${certVerificationUrl}`
+      `Honored to receive the official "${certificate.title}" (${certificate.achievementSubtitle || 'Java Full Stack & DSA Mastery'}) under the direct Mentorship of Kapil Narula at India's 13-Day Java DSA Championship 2026! 🚀\n\nVerified Credential ID: ${certificate.certificateNo}\nVerify Authenticity: ${certVerificationUrl}`
     );
     window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(certVerificationUrl)}&summary=${text}`, '_blank');
   };
 
   const handleShareWhatsApp = () => {
     const text = encodeURIComponent(
-      `🎓 Verified Certificate: ${certificate.participantName} has been awarded "${certificate.title}" for Team ${certificate.teamName} at India's 13-Day Java DSA Championship 2026!\nCredential ID: ${certificate.certificateNo}\nVerify Authenticity: ${certVerificationUrl}`
+      `🎓 Official Credential: ${certificate.participantName} has been awarded "${certificate.title}" under the Mentorship of Kapil Narula at India's 13-Day Java DSA Championship 2026!\nCredential ID: ${certificate.certificateNo}\nVerify Authenticity: ${certVerificationUrl}`
     );
     window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
   };

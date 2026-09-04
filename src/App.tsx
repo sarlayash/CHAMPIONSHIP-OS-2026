@@ -25,7 +25,7 @@ import { HallOfFame } from './components/halloffame/HallOfFame';
 import { VerificationPortal } from './components/verification/VerificationPortal';
 import { AdminPortal } from './components/admin/AdminPortal';
 import { CertificateModal } from './components/certificate/CertificateModal';
-import { BulkIssuanceModal } from './components/certificate/BulkIssuanceModal';
+import { BulkIssuanceModal, IssuanceMode } from './components/certificate/BulkIssuanceModal';
 import { ParticipantModal } from './components/participant/ParticipantModal';
 
 export default function App() {
@@ -125,7 +125,17 @@ export default function App() {
   const [selectedCertificate, setSelectedCertificate] = useState<CertificateRecord | null>(null);
   const [selectedParticipant, setSelectedParticipant] = useState<Participant | null>(null);
   const [bulkModalOpen, setBulkModalOpen] = useState<boolean>(false);
+  const [bulkModalMode, setBulkModalMode] = useState<IssuanceMode>('all');
+  const [bulkModalTeamId, setBulkModalTeamId] = useState<string | undefined>(undefined);
+  const [bulkModalParticipantId, setBulkModalParticipantId] = useState<string | undefined>(undefined);
   const [verificationInitialCert, setVerificationInitialCert] = useState<string>('');
+
+  const handleOpenBulkModal = (mode: IssuanceMode = 'all', teamId?: string, participantId?: string) => {
+    setBulkModalMode(mode);
+    setBulkModalTeamId(teamId);
+    setBulkModalParticipantId(participantId);
+    setBulkModalOpen(true);
+  };
 
   // Handle URL query parameters for direct verification links (e.g. ?verify=SNPS-JDSA26-W-001)
   useEffect(() => {
@@ -198,7 +208,7 @@ export default function App() {
               participants={participants}
               certificates={certificates}
               onNavigate={(tab) => setActiveTab(tab)}
-              onOpenBulkModal={() => setBulkModalOpen(true)}
+              onOpenBulkModal={() => handleOpenBulkModal('all')}
             />
           </div>
         )}
@@ -209,7 +219,7 @@ export default function App() {
             teams={teams}
             isAdminLoggedIn={isAdminLoggedIn}
             onViewCertificate={(cert) => setSelectedCertificate(cert)}
-            onOpenBulkModal={() => setBulkModalOpen(true)}
+            onOpenBulkModal={(mode) => handleOpenBulkModal(mode || 'all')}
           />
         )}
 
@@ -266,7 +276,7 @@ export default function App() {
             setSettings={setSettings}
             rubricCriteria={RUBRIC_CRITERIA}
             awards={AWARDS_DATA}
-            onOpenBulkModal={() => setBulkModalOpen(true)}
+            onOpenBulkModal={(mode, teamId, participantId) => handleOpenBulkModal(mode, teamId, participantId)}
             onViewCertificate={(cert) => setSelectedCertificate(cert)}
           />
         )}
@@ -279,7 +289,7 @@ export default function App() {
         onVerify={handleVerifyFromCert}
       />
 
-      {/* Bulk Issuance Engine Modal */}
+      {/* Certificate Issuance Engine Modal (All Learners, Team-Wise, Individual) */}
       <BulkIssuanceModal
         isOpen={bulkModalOpen}
         onClose={() => setBulkModalOpen(false)}
@@ -287,6 +297,9 @@ export default function App() {
         participants={participants}
         settings={settings}
         onBulkIssue={handleBulkIssue}
+        initialMode={bulkModalMode}
+        initialTeamId={bulkModalTeamId}
+        initialParticipantId={bulkModalParticipantId}
       />
 
       {/* Student Participant Dossier & Digital ID Card Modal */}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Team, 
   Participant, 
@@ -107,6 +107,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   // Settings form state
   const [tempSettings, setTempSettings] = useState<ChampionshipSettings>(settings);
   const [settingsSavedToast, setSettingsSavedToast] = useState(false);
+
+  useEffect(() => {
+    setTempSettings(settings);
+  }, [settings]);
 
   // Single Certificate Creator Modal state
   const [singleIssueOpen, setSingleIssueOpen] = useState(false);
@@ -261,9 +265,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   // Save Settings
   const handleSaveSettings = (e: React.FormEvent) => {
     e.preventDefault();
-    setSettings(tempSettings);
+    const updated: ChampionshipSettings = {
+      ...tempSettings,
+      lastUpdatedTimestamp: new Date().toISOString(),
+    };
+    setSettings(updated);
+    setTempSettings(updated);
     setSettingsSavedToast(true);
-    setTimeout(() => setSettingsSavedToast(false), 2500);
+    setTimeout(() => setSettingsSavedToast(false), 3000);
   };
 
   // Explicit Reset to Ground Zero (0 Scores, 0 Certificates)
@@ -979,6 +988,58 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 Settings Saved!
               </span>
             )}
+          </div>
+
+          {/* LIVE STATUS & REAL-TIME BROADCAST CONTROLS (DIRECT LANDING PAGE SYNC) */}
+          <div className="p-4 rounded-xl bg-black border border-[#d4af37]/40 space-y-3 shadow-inner">
+            <div className="flex items-center gap-2 text-[#ffd700] font-black uppercase tracking-wider text-xs font-royal">
+              <Sparkles className="w-4 h-4 text-[#ffd700]" />
+              <span>Fortune 500 Live Status & Landing Page Synchronization</span>
+            </div>
+            <p className="text-[11px] text-slate-400">
+              Any changes saved here immediately update the real-time chronometer bar and the landing page hero banner across all sessions.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-slate-300 font-semibold mb-1">
+                  Live Status Broadcast (e.g., GRAND FINALE EVALUATION IN PROGRESS)
+                </label>
+                <input
+                  type="text"
+                  value={tempSettings.liveStatusText || ''}
+                  onChange={(e) => setTempSettings({ ...tempSettings, liveStatusText: e.target.value })}
+                  placeholder="LIVE • 13-DAY CHAMPIONSHIP IN PROGRESS"
+                  className="w-full px-3.5 py-2 bg-[#050811] border border-[#d4af37]/40 rounded-lg text-white font-mono-code focus:outline-none focus:border-[#ffd700]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-300 font-semibold mb-1">
+                  Active Stage Indicator
+                </label>
+                <input
+                  type="text"
+                  value={tempSettings.activeStage || ''}
+                  onChange={(e) => setTempSettings({ ...tempSettings, activeStage: e.target.value })}
+                  placeholder="Day 13 • Grand Finale Hackathon"
+                  className="w-full px-3.5 py-2 bg-[#050811] border border-[#d4af37]/40 rounded-lg text-white font-mono-code focus:outline-none focus:border-[#ffd700]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-slate-300 font-semibold mb-1">
+                Announcement Notice (Visible on Top of Landing Page)
+              </label>
+              <input
+                type="text"
+                value={tempSettings.announcementNotice || ''}
+                onChange={(e) => setTempSettings({ ...tempSettings, announcementNotice: e.target.value })}
+                placeholder="Real-time jury deliberations underway for Grand Finale Hackathon."
+                className="w-full px-3.5 py-2 bg-[#050811] border border-[#d4af37]/40 rounded-lg text-white focus:outline-none focus:border-[#ffd700]"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

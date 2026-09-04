@@ -19,6 +19,10 @@ export const INITIAL_SETTINGS: ChampionshipSettings = {
   totalLearners: 0,
   totalTeams: 10,
   verificationBaseUrl: "https://championshipos.verify.edu/cert/",
+  liveStatusText: "LIVE BROADCAST • CHAMPIONSHIP ACTIVE",
+  activeStage: "Stage 06: Grand Finale & Rubric Defense",
+  announcementNotice: "Grand Finale Live Stage Defense • All 10 Teams Active in Evaluation",
+  lastUpdatedTimestamp: new Date().toISOString(),
 };
 
 // 10 Official Teams with zeroed metrics ready for real admin score inputs

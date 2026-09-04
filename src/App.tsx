@@ -16,6 +16,7 @@ import {
 } from './data/championshipData';
 
 import { Navbar } from './components/layout/Navbar';
+import { LiveStatusBar } from './components/layout/LiveStatusBar';
 import { Footer } from './components/layout/Footer';
 import { LandingHero } from './components/landing/LandingHero';
 import { CertificatesDirectory } from './components/certificate/CertificatesDirectory';
@@ -185,7 +186,15 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-sans selection:bg-amber-500 selection:text-slate-950">
+    <div className="min-h-screen bg-[#020409] text-slate-100 flex flex-col font-sans selection:bg-[#ffd700] selection:text-slate-950">
+      {/* Global Fortune 500 Executive Live Chronometer & System Status Bar */}
+      <LiveStatusBar
+        settings={settings}
+        teams={teams}
+        participants={participants}
+        certificates={certificates}
+      />
+
       {/* Navigation Header */}
       <Navbar
         activeTab={activeTab}

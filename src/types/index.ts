@@ -143,4 +143,8 @@ export interface ChampionshipSettings {
   totalLearners: number;
   totalTeams: number;
   verificationBaseUrl: string;
+  liveStatusText?: string;
+  activeStage?: string;
+  announcementNotice?: string;
+  lastUpdatedTimestamp?: string;
 }

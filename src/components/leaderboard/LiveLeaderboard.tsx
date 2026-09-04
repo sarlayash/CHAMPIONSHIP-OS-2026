@@ -301,8 +301,16 @@ export const LiveLeaderboard: React.FC<LiveLeaderboardProps> = ({
                       <td className="py-3.5 px-4 font-mono-code text-slate-400">
                         {team.stageScores.hackathonFinale.toLocaleString()}
                       </td>
-                      <td className="py-3.5 px-4 text-right font-mono-code font-bold text-amber-300 text-sm">
-                        {team.totalPoints.toLocaleString()}
+                      <td className="py-3.5 px-4 text-right">
+                        <span className="font-mono-code font-bold text-amber-300 text-sm block">
+                          {team.totalPoints.toLocaleString()}
+                        </span>
+                        {Boolean(team.bonusPoints && team.bonusPoints > 0) && (
+                          <span className="text-[10px] font-mono-code text-amber-400 font-semibold inline-flex items-center gap-0.5">
+                            <Sparkles className="w-2.5 h-2.5 text-amber-400" />
+                            +{team.bonusPoints.toLocaleString()} bonus
+                          </span>
+                        )}
                       </td>
                       <td className="py-3.5 px-4 text-center">
                         <button className="p-1.5 rounded-lg bg-slate-800 hover:bg-amber-500 hover:text-slate-950 text-slate-400 transition">

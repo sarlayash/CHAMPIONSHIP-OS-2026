@@ -719,13 +719,13 @@ export const LearnersManager: React.FC<LearnersManagerProps> = ({
                       type="number"
                       required
                       min={0}
-                      max={100000}
                       value={formPoints}
                       onChange={(e) => setFormPoints(Number(e.target.value))}
                       className="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-amber-300 font-mono-code font-bold text-sm focus:outline-none focus:border-amber-500"
+                      placeholder="e.g. 25000 (No point limit)"
                     />
-                    <span className="text-[10px] text-slate-500 mt-0.5 block">
-                      Directly factors into Team Total Points & Standings
+                    <span className="text-[10px] text-slate-400 mt-0.5 block">
+                      No point limits. Auto-aggregates into Team Total Score & Standings
                     </span>
                   </div>
 

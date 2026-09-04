@@ -294,12 +294,15 @@ export const AdminUserManual: React.FC = () => {
             </div>
 
             <div className="p-4 bg-slate-950 rounded-xl border border-slate-800 space-y-2">
-              <span className="text-emerald-400 font-bold block text-xs">Real Member Point Synchronization</span>
+              <span className="text-emerald-400 font-bold block text-xs">Auto-Calculated Real Numbers & Team Bonus Points</span>
               <p className="text-slate-300">
-                To ensure 100% genuine numbers, click <strong>"Sync Points from Members"</strong>. This loops through every learner assigned to each team and recalculates the team's total points as the exact mathematical sum of its members.
+                Whenever an administrator adds or edits team members, changes member points, or awards bonus points, the system <strong>automatically recalculates</strong> all team scores and cohort rankings in real-time.
               </p>
-              <p className="text-[11px] text-slate-500">
-                Formula: <code>Team_Total = Σ(Learner_Points)</code>. Zero artificial inflation.
+              <div className="p-2.5 rounded bg-slate-900 border border-slate-800 text-[11px] font-mono-code text-amber-300">
+                Team Total = Σ(Member Points) + Team Bonus Points + Σ(Stage Scores)
+              </div>
+              <p className="text-[11px] text-slate-400">
+                <strong>No Limit on Point Values:</strong> Both individual member scores and team bonus points accept unrestricted values to accommodate grand challenges and high-volume competitive point structures.
               </p>
             </div>
           </div>

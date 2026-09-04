@@ -137,11 +137,16 @@ export default function App() {
     }
   }, []);
 
-  // Admin login handler (KAPILADMIN / ADMIN123)
+  // Admin login handler - authorizes Kapil Narula (KAPILADMIN or kapilnarula27july@gmail.com) with password ADMIN123
   const handleAdminLogin = (id: string, pass: string): boolean => {
-    const cleanId = id.trim().toUpperCase();
+    const cleanId = id.trim().toLowerCase();
     const cleanPass = pass.trim().toUpperCase();
-    if (cleanId === 'KAPILADMIN' && cleanPass === 'ADMIN123') {
+    const isAuthorizedId = 
+      cleanId === 'kapiladmin' || 
+      cleanId === 'kapilnarula27july@gmail.com' || 
+      cleanId === 'kapilnarula27july';
+
+    if (isAuthorizedId && cleanPass === 'ADMIN123') {
       setIsAdminLoggedIn(true);
       setCurrentRole('admin');
       setActiveTab('admin');

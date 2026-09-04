@@ -43,6 +43,7 @@ export interface Team {
   name: string;
   rank: number;
   totalPoints: number;
+  bonusPoints?: number;
   leaderId: string;
   leaderName: string;
   memberCount: number;

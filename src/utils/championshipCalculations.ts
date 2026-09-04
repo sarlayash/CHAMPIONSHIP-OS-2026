@@ -35,16 +35,18 @@ export function recalculateAllRealNumbers(
     const enrolledMembers = updatedParticipants.filter((p) => p.teamId === team.id);
     const realMemberCount = enrolledMembers.length;
     
-    // Sum real points from enrolled members if team has members, otherwise retain stage scores sum
-    const memberPointsSum = enrolledMembers.reduce((sum, p) => sum + p.totalPoints, 0);
+    // Sum real points from enrolled members
+    const memberPointsSum = enrolledMembers.reduce((sum, p) => sum + (Number(p.totalPoints) || 0), 0);
+    const bonusPoints = Number(team.bonusPoints) || 0;
     const stageScoresSum = 
-      (team.stageScores?.learningLeague || 0) +
-      (team.stageScores?.codingBattle || 0) +
-      (team.stageScores?.quizKahoot || 0) +
-      (team.stageScores?.hackathonFinale || 0);
+      (Number(team.stageScores?.learningLeague) || 0) +
+      (Number(team.stageScores?.codingBattle) || 0) +
+      (Number(team.stageScores?.quizKahoot) || 0) +
+      (Number(team.stageScores?.hackathonFinale) || 0);
 
-    // If members exist, the real individual scores define the team total
-    const computedPoints = memberPointsSum > 0 ? memberPointsSum : stageScoresSum;
+    // Auto-calculate team total score:
+    // Sum of all enrolled team members' points + additional individual team bonus points + stage points
+    const computedPoints = memberPointsSum + bonusPoints + stageScoresSum;
 
     // Determine current leader name
     const leader = enrolledMembers.find((m) => m.isLeader) || enrolledMembers[0];
@@ -54,6 +56,7 @@ export function recalculateAllRealNumbers(
     return {
       ...team,
       memberCount: realMemberCount,
+      bonusPoints,
       totalPoints: computedPoints,
       leaderName,
       leaderId,

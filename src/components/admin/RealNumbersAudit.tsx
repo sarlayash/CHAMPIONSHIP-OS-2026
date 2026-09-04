@@ -34,17 +34,28 @@ export const RealNumbersAudit: React.FC<RealNumbersAuditProps> = ({
   const totalTeamPoints = teams.reduce((sum, t) => sum + t.totalPoints, 0);
   const avgLearnerPoints = Math.round(totalLearnerPoints / (participants.length || 1));
   
-  // Calculate discrepancies between recorded team points and sum of members
+  // Calculate discrepancies between recorded team points and sum of (members + bonus + stages)
   const auditReport = teams.map((t) => {
     const enrolledMembers = participants.filter((p) => p.teamId === t.id);
-    const memberPointsSum = enrolledMembers.reduce((sum, p) => sum + p.totalPoints, 0);
-    const difference = t.totalPoints - memberPointsSum;
+    const memberPointsSum = enrolledMembers.reduce((sum, p) => sum + (Number(p.totalPoints) || 0), 0);
+    const bonusPoints = Number(t.bonusPoints) || 0;
+    const stageScoresSum = 
+      Number(t.stageScores?.learningLeague || 0) + 
+      Number(t.stageScores?.codingBattle || 0) + 
+      Number(t.stageScores?.quizKahoot || 0) + 
+      Number(t.stageScores?.hackathonFinale || 0);
+
+    const expectedTotal = memberPointsSum + bonusPoints + stageScoresSum;
+    const difference = t.totalPoints - expectedTotal;
     const isExact = difference === 0;
 
     return {
       team: t,
       enrolledCount: enrolledMembers.length,
       memberPointsSum,
+      bonusPoints,
+      stageScoresSum,
+      expectedTotal,
       recordedPoints: t.totalPoints,
       difference,
       isExact,
@@ -149,9 +160,10 @@ export const RealNumbersAudit: React.FC<RealNumbersAuditProps> = ({
                 <th className="py-3 px-4">Rank</th>
                 <th className="py-3 px-4">Team Name & Code</th>
                 <th className="py-3 px-4 text-center">Enrolled Members</th>
-                <th className="py-3 px-4 text-right">Sum of Member Points</th>
-                <th className="py-3 px-4 text-right">Recorded Team Points</th>
-                <th className="py-3 px-4 text-center">Difference</th>
+                <th className="py-3 px-4 text-right">Member Points</th>
+                <th className="py-3 px-4 text-right">Team Bonus</th>
+                <th className="py-3 px-4 text-right">Stage Scores</th>
+                <th className="py-3 px-4 text-right">Total Verified Points</th>
                 <th className="py-3 px-4 text-center">Audit Status</th>
               </tr>
             </thead>
@@ -168,31 +180,28 @@ export const RealNumbersAudit: React.FC<RealNumbersAuditProps> = ({
                   <td className="py-3 px-4 text-center font-mono-code text-slate-200">
                     {row.enrolledCount} members
                   </td>
-                  <td className="py-3 px-4 text-right font-mono-code text-amber-300 font-semibold">
+                  <td className="py-3 px-4 text-right font-mono-code text-slate-300">
                     {row.memberPointsSum.toLocaleString()} pts
                   </td>
-                  <td className="py-3 px-4 text-right font-mono-code text-white font-bold">
-                    {row.recordedPoints.toLocaleString()} pts
+                  <td className="py-3 px-4 text-right font-mono-code text-amber-300 font-semibold">
+                    +{row.bonusPoints.toLocaleString()} pts
                   </td>
-                  <td className="py-3 px-4 text-center font-mono-code">
-                    {row.difference === 0 ? (
-                      <span className="text-emerald-400 font-semibold">0</span>
-                    ) : (
-                      <span className="text-amber-400 font-semibold">
-                        {row.difference > 0 ? `+${row.difference.toLocaleString()}` : row.difference.toLocaleString()}
-                      </span>
-                    )}
+                  <td className="py-3 px-4 text-right font-mono-code text-slate-400">
+                    +{row.stageScoresSum.toLocaleString()} pts
+                  </td>
+                  <td className="py-3 px-4 text-right font-mono-code text-white font-black text-sm">
+                    {row.recordedPoints.toLocaleString()} pts
                   </td>
                   <td className="py-3 px-4 text-center">
                     {row.isExact ? (
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 text-[11px] font-bold">
                         <CheckCircle2 className="w-3.5 h-3.5" />
-                        Exact Match
+                        100% Match
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[11px] font-bold">
                         <AlertTriangle className="w-3.5 h-3.5" />
-                        Sync Available
+                        {row.difference > 0 ? `+${row.difference.toLocaleString()}` : row.difference.toLocaleString()} pts
                       </span>
                     )}
                   </td>

@@ -131,13 +131,19 @@ export const TeamsDirectory: React.FC<TeamsDirectoryProps> = ({
                 </p>
               </div>
 
-              <div className="text-right">
+              <div className="text-right flex flex-col items-end gap-1.5">
                 <div className="px-4 py-2 bg-slate-950 border border-slate-800 rounded-xl">
                   <span className="text-[10px] text-slate-400 uppercase tracking-wider block">Total Championship Points</span>
                   <span className="text-2xl font-black text-amber-400 font-mono-code">
                     {selectedTeam.totalPoints.toLocaleString()}
                   </span>
                 </div>
+                {Boolean(selectedTeam.bonusPoints && selectedTeam.bonusPoints > 0) && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono-code text-[11px] font-bold flex items-center gap-1">
+                    <Sparkles className="w-3 h-3 text-amber-400" />
+                    +{selectedTeam.bonusPoints.toLocaleString()} Team Bonus Included
+                  </span>
+                )}
               </div>
             </div>
 

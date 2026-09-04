@@ -34,10 +34,12 @@ import {
   FileSpreadsheet,
   AlertTriangle,
   User,
-  Award
+  Award,
+  Calendar
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { exportParticipantsCSV, exportTeamsCSV, exportCertificatesCSV } from '../../utils/csvExport';
+import { getSystemRealFormattedDate } from '../../utils/dateUtils';
 import { LearnersManager } from './LearnersManager';
 import { TeamsManager } from './TeamsManager';
 import { RealNumbersAudit } from './RealNumbersAudit';
@@ -119,6 +121,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [newCertTitle, setNewCertTitle] = useState('Certificate of Excellence');
   const [newCertSubtitle, setNewCertSubtitle] = useState('Outstanding Algorithmic Achievement');
   const [newCertCitation, setNewCertCitation] = useState('Conferred for superlative problem solving precision in Java.');
+  const [newCertIssueDate, setNewCertIssueDate] = useState<string>(getSystemRealFormattedDate());
 
   // Handle Login
   const handleLoginSubmit = (e: React.FormEvent) => {
@@ -168,7 +171,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
       title: newCertTitle,
       achievementSubtitle: newCertSubtitle,
       citation: newCertCitation,
-      issueDate: "February 22, 2026",
+      issueDate: newCertIssueDate || getSystemRealFormattedDate(),
       // Exclusively Kapil Narula - NO DEAN OR SENIORS
       signatory1: { 
         name: "Kapil Narula", 
@@ -1218,6 +1221,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   value={newCertSubtitle}
                   onChange={(e) => setNewCertSubtitle(e.target.value)}
                   className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-white"
+                />
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-slate-300 font-semibold flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Date of Issuance (Automatic Real System Date)</span>
+                  </label>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950 border border-emerald-500/40 text-emerald-400 font-mono-code font-semibold flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" /> Real Date Active
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  value={newCertIssueDate}
+                  onChange={(e) => setNewCertIssueDate(e.target.value)}
+                  placeholder="e.g. September 4, 2026"
+                  className="w-full p-2 bg-slate-950 border border-slate-700 rounded-lg text-white font-mono-code"
                 />
               </div>
 

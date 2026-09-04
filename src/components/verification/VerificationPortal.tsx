@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CertificateRecord } from '../../types';
+import { resolveCertificateDate } from '../../utils/dateUtils';
 import { 
   ShieldCheck, 
   Search, 
@@ -185,7 +186,7 @@ export const VerificationPortal: React.FC<VerificationPortalProps> = ({
                     <Calendar className="w-4 h-4 text-[#ffd700]" />
                     <span className="font-bold">Issue Date</span>
                   </div>
-                  <p className="text-sm font-black text-white">{searchedCert.issueDate}</p>
+                  <p className="text-sm font-black text-white">{resolveCertificateDate(searchedCert.issueDate)}</p>
                   <p className="text-[11px] text-slate-400 mt-0.5">13-Day Championship 2026</p>
                 </div>
 

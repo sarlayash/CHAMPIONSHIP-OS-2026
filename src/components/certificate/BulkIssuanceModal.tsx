@@ -11,9 +11,11 @@ import {
   ShieldCheck,
   Search,
   Filter,
-  Check
+  Check,
+  Calendar
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { getSystemRealFormattedDate } from '../../utils/dateUtils';
 
 export type IssuanceMode = 'all' | 'team' | 'individual';
 
@@ -55,6 +57,7 @@ export const BulkIssuanceModal: React.FC<BulkIssuanceModalProps> = ({
   const [customTitle, setCustomTitle] = useState('');
   const [customSubtitle, setCustomSubtitle] = useState('');
   const [customCitation, setCustomCitation] = useState('');
+  const [customIssueDate, setCustomIssueDate] = useState<string>(getSystemRealFormattedDate());
   
   const [isProcessing, setIsProcessing] = useState(false);
   const [completedCount, setCompletedCount] = useState<number | null>(null);
@@ -65,6 +68,7 @@ export const BulkIssuanceModal: React.FC<BulkIssuanceModalProps> = ({
       setIssuanceMode(initialMode);
       if (initialTeamId) setSelectedTeamId(initialTeamId);
       if (initialParticipantId) setSelectedParticipantId(initialParticipantId);
+      setCustomIssueDate(getSystemRealFormattedDate());
       setCompletedCount(null);
     }
   }, [isOpen, initialMode, initialTeamId, initialParticipantId]);
@@ -175,7 +179,7 @@ export const BulkIssuanceModal: React.FC<BulkIssuanceModalProps> = ({
           title: customTitle || "Certificate of Excellence",
           achievementSubtitle: customSubtitle || "Mentorship by Kapil Narula",
           citation: customCitation || `Conferred under the direct Mentorship of Kapil Narula for exemplary performance and algorithmic excellence in the 13-Day Java DSA Championship 2026.`,
-          issueDate: "February 22, 2026",
+          issueDate: customIssueDate || getSystemRealFormattedDate(),
           // Strictly Kapil Narula - NO DEAN OR SENIORS
           signatory1: { 
             name: "Kapil Narula", 
@@ -562,6 +566,25 @@ export const BulkIssuanceModal: React.FC<BulkIssuanceModalProps> = ({
                   onChange={(e) => setCustomSubtitle(e.target.value)}
                   placeholder="e.g. Advanced Algorithmic Mastery &amp; Problem Solving"
                   className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white placeholder:text-slate-600 focus:outline-none focus:border-[#d4af37]"
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-slate-300 font-semibold text-[11px] flex items-center gap-1.5">
+                    <Calendar className="w-3.5 h-3.5 text-[#e5c158]" />
+                    <span>Date of Issuance (Automatic Real System Date)</span>
+                  </label>
+                  <span className="text-[10px] px-2 py-0.5 rounded bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 font-mono-code font-semibold flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3" /> System Date Synced
+                  </span>
+                </div>
+                <input
+                  type="text"
+                  value={customIssueDate}
+                  onChange={(e) => setCustomIssueDate(e.target.value)}
+                  placeholder="e.g. September 4, 2026"
+                  className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-lg text-white placeholder:text-slate-600 focus:outline-none focus:border-[#d4af37] font-mono-code text-xs"
                 />
               </div>
 
